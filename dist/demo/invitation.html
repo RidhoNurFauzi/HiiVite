@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Invitation Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#FBF8F3; --card:#FFFDF9; --ink:#2A2420; --accent:#A98250; --muted:#857B71; --soft:#F1E9DD; }
+  /* Optional palettes: /demo/invitation.html?template=sage|blush|noir */
+  body[data-theme="sage"]  { --bg:#F5F6F1; --card:#FBFCF8; --accent:#7E8F6A; --soft:#E6EADB; }
+  body[data-theme="blush"] { --bg:#FBF3F1; --card:#FFFAF8; --accent:#B87E78; --soft:#F3E2DE; }
+  body[data-theme="noir"]  { --bg:#1F1B18; --card:#2A2521; --ink:#F3EBDD; --accent:#D2B88F; --muted:#B5A99B; --soft:#332D28; }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: 'Jost', sans-serif; font-weight: 300; background: var(--bg); color: var(--ink); text-align: center; -webkit-font-smoothing: antialiased; }
+  section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 1.75rem; }
+  .eyebrow { font-size: .65rem; letter-spacing: .34em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+  h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+  h1 { font-size: 3.4rem; line-height: 1.05; margin: 1.2rem 0; }
+  h1 em { display: block; font-size: 1.6rem; color: var(--accent); margin: .2rem 0; }
+  h2 { font-size: 2rem; margin-bottom: 1.2rem; }
+  .line { width: 70px; height: 1px; background: var(--accent); margin: 1.6rem auto; opacity: .6; }
+  p { color: var(--muted); line-height: 1.8; font-size: .92rem; }
+  .date { letter-spacing: .2em; text-transform: uppercase; font-size: .8rem; color: var(--ink); }
+  .card { background: var(--card); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); border-radius: 1.5rem; padding: 2.5rem 1.5rem; width: 100%; max-width: 340px; }
+  .alt { background: var(--soft); }
+  a.btn { display: inline-block; margin-top: 1.4rem; padding: .85rem 2rem; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; }
+  .rsvp { background: var(--accent); color: #fff !important; }
+  .fade { animation: up 1s ease both; }
+  @keyframes up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<section class="fade">
+  <p class="eyebrow">The Wedding Of</p>
+  <h1><span id="bride">Andini</span><em>&amp;</em><span id="groom">Raka</span></h1>
+  <div class="line"></div>
+  <p class="date" id="date">Saturday, 12 December 2026</p>
+</section>
+
+<section class="alt">
+  <p class="eyebrow">Together with their families</p>
+  <h2>We joyfully invite you</h2>
+  <p>to celebrate the beginning of our new chapter.<br />Your presence and blessing would mean the world to us.</p>
+</section>
+
+<section>
+  <div class="card">
+    <p class="eyebrow">Akad &amp; Reception</p>
+    <div class="line"></div>
+    <p class="date" id="date2">Saturday, 12 December 2026</p>
+    <p style="margin-top:.8rem">10:00 AM — Finish<br />Sample Venue Hall, Jakarta</p>
+    <a class="btn" href="#" onclick="return false">View Location</a>
+  </div>
+</section>
+
+<section class="alt">
+  <p class="eyebrow">Kindly Respond</p>
+  <h2>Will you join us?</h2>
+  <p>Let us know with one tap.</p>
+  <a class="btn rsvp" href="#" onclick="return false">RSVP via WhatsApp</a>
+</section>
+
+<script>
+  const q = new URLSearchParams(location.search);
+  const theme = q.get('template');
+  if (['sage', 'blush', 'noir'].some(t => theme && theme.includes(t))) {
+    document.body.dataset.theme = ['sage', 'blush', 'noir'].find(t => theme.includes(t));
+  }
+  const first = (s) => (s || '').trim().split(' ')[0];
+  if (q.get('groom')) document.getElementById('groom').textContent = first(q.get('groom'));
+  if (q.get('bride')) document.getElementById('bride').textContent = first(q.get('bride'));
+  if (q.get('date')) {
+    const d = new Date(q.get('date') + 'T00:00:00');
+    if (!isNaN(d)) {
+      const t = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('date').textContent = t;
+      document.getElementById('date2').textContent = t;
+    }
+  }
+</script>
+</body>
+</html>
