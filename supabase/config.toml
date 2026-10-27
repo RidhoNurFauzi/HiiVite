@@ -1,0 +1,7 @@
+project_id = "qwiznqfpwkdkqwbzusjq"
+
+[functions.checkout-qris]
+verify_jwt = false
+
+[functions.payment-notification]
+verify_jwt = false

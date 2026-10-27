@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hiivite — Wedding Invitations</title>
+  <meta name="description" content="Hiivite — premium digital and printed wedding invitations. Customize your details and pay instantly with QRIS." />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts: Cormorant Garamond (headings) + Jost (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FBF8F3',
+            ivory: '#FFFDF9',
+            sand: '#F1E9DD',
+            gold: '#A98250',
+            'gold-dark': '#8A6A3F',
+            'gold-light': '#D2B88F',
+            ink: '#2A2420',
+            muted: '#857B71',
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"Jost"', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 4.5rem; }
+    body { font-family: 'Jost', sans-serif; background: #FBF8F3; color: #2A2420; -webkit-font-smoothing: antialiased; font-weight: 300; }
+    h1, h2, h3, .font-serif { font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+    .eyebrow { font-size: 0.7rem; letter-spacing: 0.32em; text-transform: uppercase; color: #8A6A3F; font-weight: 500; }
+    .hairline { height: 1px; background: linear-gradient(90deg, transparent, #D2B88F, transparent); }
+
+    .fade-up { animation: fadeUp 0.9s ease both; }
+    .fade-up-2 { animation: fadeUp 0.9s ease 0.15s both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Buttons */
+    .btn-solid { background: #2A2420; color: #FBF8F3; transition: background .3s, transform .3s; }
+    .btn-solid:hover { background: #A98250; }
+    .btn-line { border: 1px solid #A98250; color: #8A6A3F; transition: all .3s; }
+    .btn-line:hover { background: #A98250; color: #fff; }
+
+    /* Form fields: underline style */
+    .field-input {
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid #E4D9C8;
+      border-radius: 0;
+      padding: 0.6rem 0;
+      width: 100%;
+      color: #2A2420;
+      transition: border-color .25s;
+    }
+    .field-input::placeholder { color: #B9AFA3; }
+    .field-input:focus { border-bottom-color: #A98250; outline: none; }
+
+    /* Cards injected by app.js into #productGrid — soft, minimal styling */
+    #productGrid > div:not(.col-span-full),
+    #productGrid > article,
+    #productGrid > a {
+      background: #FFFDF9;
+      border: 1px solid #EFE6D8;
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform .4s ease, box-shadow .4s ease, border-color .4s ease;
+    }
+    #productGrid > div:not(.col-span-full):hover,
+    #productGrid > article:hover,
+    #productGrid > a:hover {
+      transform: translateY(-4px);
+      border-color: #D2B88F;
+      box-shadow: 0 18px 40px -22px rgba(138, 106, 63, 0.35);
+    }
+    #productGrid img { width: 100%; display: block; }
+    #productGrid h3, #productGrid h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; color: #2A2420; }
+    #productGrid button, #productGrid a.btn, #productGrid [data-select] {
+      transition: all .3s;
+    }
+
+    /* Custom checkbox card */
+    .addon-card { transition: border-color .25s, background .25s; }
+    .addon-card:hover { border-color: #D2B88F; }
+    .addon-card:has(input:checked) { border-color: #A98250; background: #F6EFE4; }
+
+    details > summary::-webkit-details-marker { display: none; }
+
+    /* Card action row (Preview + Buy) rendered by app.js */
+    .card-actions { display: flex; gap: .6rem; margin-top: 1.1rem; }
+    .card-actions button { flex: 1; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; padding: .8rem .75rem; border-radius: 999px; cursor: pointer; }
+
+    /* Keep the selected-card ring visible even on hover */
+    #productGrid > div.ring-2 { box-shadow: 0 0 0 2px #A98250 !important; border-color: #A98250; }
+    .btn-preview { border: 1px solid #A98250; color: #8A6A3F; background: transparent; transition: all .3s; }
+    .btn-preview:hover { background: #A98250; color: #fff; }
+    .btn-buy { background: #2A2420; color: #FBF8F3; border: 1px solid #2A2420; transition: all .3s; }
+    .btn-buy:hover { background: #A98250; border-color: #A98250; }
+
+    /* Preview modal */
+    #previewModal { position: fixed; inset: 0; z-index: 60; display: none; }
+    #previewModal.open { display: block; }
+    #previewModal .backdrop { position: absolute; inset: 0; background: rgba(42,36,32,.72); backdrop-filter: blur(4px); }
+    #previewModal .panel {
+      position: absolute; inset: 0; margin: auto; width: min(100%, 1080px); height: min(100%, 880px);
+      background: #FBF8F3; display: flex; flex-direction: column; overflow: hidden;
+    }
+    @media (min-width: 768px) { #previewModal .panel { border-radius: 1.5rem; height: 92vh; box-shadow: 0 40px 100px -30px rgba(0,0,0,.5); } }
+    #previewModal .stage { flex: 1; background: #F1E9DD; display: flex; justify-content: center; overflow: auto; padding: 1rem; }
+    #previewFrame { border: 0; background: #fff; height: 100%; width: 390px; max-width: 100%; border-radius: 1.25rem; box-shadow: 0 20px 50px -25px rgba(138,106,63,.5); transition: width .3s; }
+    #previewFrame.desktop { width: 100%; border-radius: .75rem; }
+    .seg button { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; padding: .45rem .9rem; color: #857B71; }
+    .seg button.active { color: #2A2420; border-bottom: 1px solid #A98250; }
+  </style>
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+
+<body class="bg-cream text-ink">
+
+  <!-- ===== Header ===== -->
+  <header class="sticky top-0 z-40 bg-cream/85 backdrop-blur-md border-b border-gold/15">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+      <a href="/" class="font-serif text-2xl tracking-[0.18em] text-ink">HIIVITE</a>
+      <nav class="hidden sm:flex items-center gap-10 text-[0.78rem] tracking-[0.18em] uppercase text-muted">
+        <a href="#choose" class="hover:text-gold-dark transition">Order</a>
+        <a href="#features" class="hover:text-gold-dark transition">Features</a>
+        <a href="#products" class="hover:text-gold-dark transition">Templates</a>
+        <a href="#faq" class="hover:text-gold-dark transition">FAQ</a>
+      </nav>
+      <a href="#choose" class="hidden sm:inline-block btn-line text-[0.72rem] tracking-[0.2em] uppercase px-5 py-2.5 rounded-full">
+        Get Started
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 80% 20%, rgba(210,184,143,0.22), transparent 55%), radial-gradient(ellipse at 10% 90%, rgba(241,233,221,0.9), transparent 55%);"></div>
+
+    <div class="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-32 grid md:grid-cols-2 gap-16 items-center">
+      <div class="fade-up">
+        <p class="eyebrow mb-6">Digital &amp; Printed Wedding Invitations</p>
+        <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-ink mb-7">
+          Your love story,<br /><em class="text-gold-dark">beautifully</em> invited.
+        </h1>
+        <p class="text-muted text-base sm:text-lg leading-relaxed mb-10 max-w-md">
+          Choose a ready-made template and pay instantly with QRIS, or work with our developer on a design made just for you.
+        </p>
+        <div class="flex flex-wrap items-center gap-6">
+          <a href="#choose" class="btn-solid inline-block text-[0.78rem] tracking-[0.2em] uppercase px-9 py-4 rounded-full">
+            Create Your Invitation
+          </a>
+          <a href="#products" class="text-[0.78rem] tracking-[0.2em] uppercase text-gold-dark border-b border-gold/40 pb-1 hover:border-gold transition">
+            View Templates
+          </a>
+        </div>
+        <div class="mt-12 flex items-center gap-8 text-xs tracking-[0.16em] uppercase text-muted">
+          <span>Instant QRIS</span>
+          <span class="w-px h-3 bg-gold/40"></span>
+          <span>WhatsApp RSVP</span>
+        </div>
+      </div>
+
+      <!-- Invitation card preview -->
+      <div class="fade-up-2 flex justify-center">
+        <div class="relative">
+          <div class="absolute -inset-5 border border-gold/25 rounded-[2rem]"></div>
+          <div class="relative bg-ivory rounded-[1.5rem] shadow-[0_30px_70px_-30px_rgba(138,106,63,0.4)] px-10 py-14 w-72 sm:w-80 text-center">
+            <p class="eyebrow !text-[0.6rem] mb-6">Together with their families</p>
+            <p class="font-serif text-4xl text-ink leading-tight">Andini</p>
+            <p class="font-serif italic text-gold text-xl my-1">&amp;</p>
+            <p class="font-serif text-4xl text-ink leading-tight">Raka</p>
+            <div class="hairline my-8"></div>
+            <p class="text-sm tracking-[0.14em] uppercase text-muted">12 December 2026</p>
+            <p class="text-sm text-muted mt-2">Jakarta, Indonesia</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Choose Your Path ===== -->
+  <section id="choose" class="max-w-5xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
+    <div class="text-center mb-14">
+      <p class="eyebrow mb-4">Start Here</p>
+      <h2 class="font-serif text-4xl sm:text-5xl text-ink">How would you like to order?</h2>
+      <p class="text-muted mt-4 max-w-lg mx-auto">Personalize a ready-made template yourself, or let us design something entirely your own.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Option 1: Template -->
+      <div class="bg-ivory rounded-3xl border border-gold/15 p-9 sm:p-11 flex flex-col transition hover:border-gold/40">
+        <span class="font-serif text-gold text-lg tracking-widest mb-6">01</span>
+        <h3 class="font-serif text-3xl text-ink mb-3">Ready-made Template</h3>
+        <p class="text-muted text-sm leading-relaxed mb-7">Choose a design, fill in your names, date, and venue, then pay instantly with QRIS.</p>
+        <ul class="text-sm text-muted space-y-3 mb-9">
+          <li class="flex items-center gap-3"><span class="w-4 h-px bg-gold"></span> Ready in minutes</li>
+          <li class="flex items-center gap-3"><span class="w-4 h-px bg-gold"></span> Edit names, date &amp; venue yourself</li>
+          <li class="flex items-center gap-3"><span class="w-4 h-px bg-gold"></span> Instant QRIS payment</li>
+        </ul>
+        <a href="#products" class="btn-solid mt-auto text-center text-[0.75rem] tracking-[0.2em] uppercase px-6 py-4 rounded-full">
+          Choose a Template
+        </a>
+      </div>
+
+      <!-- Option 2: Custom -->
+      <div class="bg-ivory rounded-3xl border border-gold/15 p-9 sm:p-11 flex flex-col transition hover:border-gold/40">
+        <span class="font-serif text-gold text-lg tracking-widest mb-6">02</span>
+        <h3 class="font-serif text-3xl text-ink mb-3">Custom Design</h3>
+        <p class="text-muted text-sm leading-relaxed mb-7">Tell our developer your theme, colors, and ideas, and we'll design it exactly as you imagine.</p>
+        <ul class="text-sm text-muted space-y-3 mb-9">
+          <li class="flex items-center gap-3"><span class="w-4 h-px bg-gold"></span> Any theme, any style</li>
+          <li class="flex items-center gap-3"><span class="w-4 h-px bg-gold"></span> Special features on request</li>
+          <li class="flex items-center gap-3"><span class="w-4 h-px bg-gold"></span> Price discussed via WhatsApp</li>
+        </ul>
+        <a id="customOrderBtn"
+          href="https://wa.me/6281316065637?text=Hello%2C%20I%27m%20interested%20in%20a%20custom%20wedding%20invitation%20from%20Hiivite."
+          target="_blank" rel="noopener"
+          class="btn-line mt-auto text-center text-[0.75rem] tracking-[0.2em] uppercase px-6 py-4 rounded-full">
+          Contact the Developer
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Features ===== -->
+  <section id="features" class="bg-sand/60">
+    <div class="max-w-5xl mx-auto px-5 sm:px-8 py-20 sm:py-24">
+      <div class="text-center mb-14">
+        <p class="eyebrow mb-4">Why Hiivite</p>
+        <h2 class="font-serif text-4xl text-ink">Everything you need to invite</h2>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-12 text-center">
+        <div>
+          <p class="font-serif text-gold text-3xl mb-4">i</p>
+          <h3 class="font-serif text-2xl text-ink mb-3">Customize Details</h3>
+          <p class="text-muted text-sm leading-relaxed">Names, date, and venue map — all editable in a simple form.</p>
+        </div>
+        <div>
+          <p class="font-serif text-gold text-3xl mb-4">ii</p>
+          <h3 class="font-serif text-2xl text-ink mb-3">Instant QRIS</h3>
+          <p class="text-muted text-sm leading-relaxed">Pay with any e-wallet or banking app via a universal QRIS code.</p>
+        </div>
+        <div>
+          <p class="font-serif text-gold text-3xl mb-4">iii</p>
+          <h3 class="font-serif text-2xl text-ink mb-3">WhatsApp RSVP</h3>
+          <p class="text-muted text-sm leading-relaxed">Let guests confirm attendance with one tap on WhatsApp.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Product Gallery ===== -->
+  <section id="products">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
+      <div class="text-center mb-14">
+        <p class="eyebrow mb-4">Template Collection</p>
+        <h2 class="font-serif text-4xl sm:text-5xl text-ink">Choose Your Template</h2>
+        <p class="text-muted mt-4 max-w-lg mx-auto">Browse our ready-made designs and pick one to begin your order.</p>
+      </div>
+
+      <div id="productGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        <!-- Product cards injected by app.js -->
+        <div class="col-span-full text-center text-muted py-10">Loading designs…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Order / Customization + Checkout ===== -->
+  <section id="order" class="bg-sand/60">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
+      <div class="text-center mb-14">
+        <p class="eyebrow mb-4">Template Order</p>
+        <h2 class="font-serif text-4xl sm:text-5xl text-ink">Customize &amp; Pay</h2>
+        <p class="text-muted mt-4 max-w-lg mx-auto">Fill in your details, choose add-ons, and pay securely with QRIS.</p>
+      </div>
+
+      <div id="noSelectionPrompt" class="text-center bg-ivory rounded-3xl border border-gold/15 p-12 sm:p-16 max-w-2xl mx-auto">
+        <p class="font-serif text-3xl text-ink mb-3">No invitation selected yet</p>
+        <p class="text-muted mb-8 text-sm">Pick a design from the collection above to begin your order.</p>
+        <a href="#products" class="btn-solid inline-block text-[0.75rem] tracking-[0.2em] uppercase px-9 py-4 rounded-full">Browse Designs</a>
+      </div>
+
+      <form id="orderForm" class="grid lg:grid-cols-2 gap-8 hidden" novalidate>
+        <!-- ----- Left: Data form ----- -->
+        <div class="bg-ivory rounded-3xl border border-gold/15 p-8 sm:p-11">
+          <h3 class="font-serif text-3xl text-ink mb-8">Invitation Details</h3>
+
+          <div class="space-y-7">
+            <div>
+              <label for="groom_name" class="block eyebrow !text-[0.65rem] !text-muted mb-1">Groom's Name</label>
+              <input id="groom_name" name="groom_name" type="text" required class="field-input" placeholder="e.g. Raka Pratama" />
+            </div>
+
+            <div>
+              <label for="bride_name" class="block eyebrow !text-[0.65rem] !text-muted mb-1">Bride's Name</label>
+              <input id="bride_name" name="bride_name" type="text" required class="field-input" placeholder="e.g. Andini Wijaya" />
+            </div>
+
+            <div>
+              <label for="event_date" class="block eyebrow !text-[0.65rem] !text-muted mb-1">Event Date</label>
+              <input id="event_date" name="event_date" type="date" required class="field-input" />
+            </div>
+
+            <div>
+              <label for="venue_url" class="block eyebrow !text-[0.65rem] !text-muted mb-1">Venue Location (Google Maps Link)</label>
+              <input id="venue_url" name="venue_url" type="url" class="field-input" placeholder="https://maps.google.com/..." />
+            </div>
+
+            <div>
+              <label for="customer_email" class="block eyebrow !text-[0.65rem] !text-muted mb-1">Your Email <span class="normal-case tracking-normal font-light">(for the invitation link)</span></label>
+              <input id="customer_email" name="customer_email" type="email" class="field-input" placeholder="you@example.com" />
+            </div>
+
+            <div>
+              <label for="customer_phone" class="block eyebrow !text-[0.65rem] !text-muted mb-1">Your Phone <span class="normal-case tracking-normal font-light">(WhatsApp)</span></label>
+              <input id="customer_phone" name="customer_phone" type="tel" class="field-input" placeholder="0812xxxxxxx" />
+            </div>
+
+            <!-- Add-on -->
+            <label class="addon-card flex items-start gap-4 p-5 rounded-2xl border border-gold/20 cursor-pointer">
+              <input id="whatsapp_rsvp" name="whatsapp_rsvp" type="checkbox" class="mt-1 h-4 w-4 accent-gold rounded" />
+              <span>
+                <span class="block font-serif text-xl text-ink">WhatsApp RSVP Feature</span>
+                <span class="block text-sm text-muted mt-0.5">Let guests RSVP directly via WhatsApp — one-tap confirmation.</span>
+                <span class="block text-sm text-gold-dark font-medium mt-2">+ IDR 50.000</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ----- Right: Summary & QRIS ----- -->
+        <div class="bg-ivory rounded-3xl border border-gold/15 p-8 sm:p-11 lg:sticky lg:top-24 self-start">
+          <h3 class="font-serif text-3xl text-ink mb-8">Order Summary</h3>
+
+          <div class="space-y-4 text-sm">
+            <div id="summaryProductRow" class="flex justify-between text-ink">
+              <span id="summaryProductName">Wedding Invitation Package</span>
+              <span id="summaryBase">IDR 299.000</span>
+            </div>
+            <div id="summaryAddonRow" class="flex justify-between text-muted hidden">
+              <span>WhatsApp RSVP Add-on</span>
+              <span id="summaryAddon">IDR 0</span>
+            </div>
+            <div class="hairline my-5"></div>
+            <div class="flex justify-between items-baseline text-ink">
+              <span class="eyebrow !text-muted">Total</span>
+              <span id="summaryTotal" class="font-serif text-3xl">IDR 299.000</span>
+            </div>
+          </div>
+
+          <button id="payNowBtn" type="submit"
+            class="btn-solid mt-8 w-full text-[0.78rem] tracking-[0.2em] uppercase py-4 rounded-full disabled:opacity-50 disabled:cursor-not-allowed">
+            Pay Now with QRIS
+          </button>
+
+          <!-- QRIS container -->
+          <div id="qrisContainer" class="mt-8 hidden">
+            <div class="rounded-2xl border border-gold/20 bg-cream p-7 text-center">
+              <p class="font-serif text-2xl text-ink mb-1">Scan to Pay</p>
+              <p class="text-xs text-muted mb-5">Open your e-wallet or banking app and scan the QRIS code below.</p>
+              <img id="qrisImage" src="" alt="QRIS payment code" class="mx-auto w-56 h-56 bg-white p-3 rounded-xl border border-gold/20" />
+
+              <!-- QR link buttons -->
+              <div class="mt-4 flex flex-col sm:flex-row gap-2 justify-center">
+                <a id="qrisUrlLink" href="#" target="_blank" rel="noopener"
+                  class="hidden text-center text-sm font-semibold border border-gold text-gold-dark px-4 py-2 rounded-full hover:bg-gold hover:text-white transition">
+                  Open QR in New Tab
+                </a>
+                <button id="copyQrisBtn" type="button"
+                  class="hidden text-center text-sm font-semibold border border-gold/40 text-muted px-4 py-2 rounded-full hover:border-gold hover:text-gold-dark transition">
+                  Copy QR Link
+                </button>
+              </div>
+              <p class="mt-3 text-xs text-muted">On mobile? Open the QR in a new tab, save the image, then upload it from your e-wallet's scan gallery.</p>
+
+              <div id="countdownWrap" class="mt-5">
+                <p class="text-xs tracking-[0.16em] uppercase text-muted">Payment window expires in</p>
+                <p id="countdownTimer" class="font-serif text-3xl text-gold-dark mt-1">15:00</p>
+              </div>
+              <p id="qrisOrderId" class="mt-3 text-xs text-muted break-all"></p>
+            </div>
+
+            <!-- Success state -->
+            <div id="paymentSuccess" class="hidden mt-4 rounded-2xl border border-green-200 bg-green-50/70 p-7 text-center">
+              <div class="w-12 h-12 mx-auto rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl mb-3">&#10003;</div>
+              <p class="font-serif text-2xl text-ink mb-1">Payment Successful</p>
+              <p class="text-sm text-muted mb-5">Your invitation is ready. We've sent the link to your email.</p>
+              <a id="invitationLink" href="#" target="_blank"
+                class="btn-solid inline-block text-[0.75rem] tracking-[0.2em] uppercase px-8 py-3.5 rounded-full">
+                View Your Invitation
+              </a>
+            </div>
+          </div>
+
+          <!-- Error / status -->
+          <p id="formError" class="hidden mt-5 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl p-3"></p>
+          <p id="formStatus" class="hidden mt-5 text-sm text-gold-dark bg-gold/10 border border-gold/20 rounded-xl p-3"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="faq">
+    <div class="max-w-3xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
+      <div class="text-center mb-12">
+        <p class="eyebrow mb-4">Questions</p>
+        <h2 class="font-serif text-4xl text-ink">Frequently Asked</h2>
+      </div>
+      <div class="divide-y divide-gold/20 border-y border-gold/20">
+        <details class="group py-6">
+          <summary class="font-serif text-xl text-ink cursor-pointer list-none flex justify-between items-center">What's the difference between Template and Custom? <span class="text-gold text-2xl font-light group-open:rotate-45 transition">+</span></summary>
+          <p class="text-muted text-sm leading-relaxed mt-4 pr-8">Templates are ready-made designs you personalize and pay for online. Custom orders are designed from scratch with our developer, with pricing agreed through WhatsApp.</p>
+        </details>
+        <details class="group py-6">
+          <summary class="font-serif text-xl text-ink cursor-pointer list-none flex justify-between items-center">When will I receive my invitation? <span class="text-gold text-2xl font-light group-open:rotate-45 transition">+</span></summary>
+          <p class="text-muted text-sm leading-relaxed mt-4 pr-8">Your invitation link is generated automatically the moment your payment is confirmed and sent to your email instantly.</p>
+        </details>
+        <details class="group py-6">
+          <summary class="font-serif text-xl text-ink cursor-pointer list-none flex justify-between items-center">What is the WhatsApp RSVP add-on? <span class="text-gold text-2xl font-light group-open:rotate-45 transition">+</span></summary>
+          <p class="text-muted text-sm leading-relaxed mt-4 pr-8">For IDR 50.000, guests can confirm their attendance with one tap on WhatsApp — no app install or account needed.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="border-t border-gold/20">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-14 text-center">
+      <p class="font-serif text-2xl tracking-[0.2em] text-ink mb-3">HIIVITE</p>
+      <div class="hairline w-24 mx-auto my-5"></div>
+      <p class="text-sm text-muted">Premium digital &amp; printed wedding invitations.</p>
+      <p class="mt-6 text-xs tracking-[0.14em] uppercase text-muted/80">&copy; 2026 Hiivite. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== Template Preview Modal ===== -->
+  <div id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+    <div class="backdrop" data-close></div>
+    <div class="panel">
+      <div class="flex items-center justify-between gap-4 px-5 sm:px-8 py-4 border-b border-gold/20 bg-ivory">
+        <div class="min-w-0">
+          <p class="eyebrow !text-[0.6rem]">Template Preview</p>
+          <h3 id="previewTitle" class="font-serif text-2xl text-ink truncate">Template</h3>
+        </div>
+        <div class="seg hidden sm:flex items-center gap-2">
+          <button type="button" data-device="mobile" class="active">Mobile</button>
+          <button type="button" data-device="desktop">Desktop</button>
+        </div>
+        <button type="button" data-close class="text-3xl leading-none text-muted hover:text-ink transition" aria-label="Close preview">&times;</button>
+      </div>
+
+      <div class="stage">
+        <iframe id="previewFrame" title="Invitation preview" loading="lazy"></iframe>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 sm:px-8 py-4 border-t border-gold/20 bg-ivory">
+        <p class="text-xs text-muted text-center sm:text-left">Sample data shown. Your names and date will appear once you fill in the form.</p>
+        <button id="previewUseBtn" type="button" class="btn-solid w-full sm:w-auto text-[0.75rem] tracking-[0.2em] uppercase px-8 py-3.5 rounded-full">
+          Use This Template
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>

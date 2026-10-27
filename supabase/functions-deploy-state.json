@@ -1,0 +1,13 @@
+{
+  "projectId": "72405374",
+  "functions": {
+    "checkout-qris": {
+      "hasChanged": false,
+      "hash": "b3a9c20d91afcd9d7aa87c518e6402b76a703527e0ebcc9af9d204d1338d49ab"
+    },
+    "payment-notification": {
+      "hasChanged": false,
+      "hash": "aa083753bafddf9321cfe744b914ff29c8a33fc414bec8a02e47865d027d1426"
+    }
+  }
+}

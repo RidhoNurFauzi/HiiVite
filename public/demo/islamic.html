@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of James & Julia</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            950: '#032e22',
+                            900: '#064E3B',
+                            800: '#065f46',
+                        },
+                        gold: {
+                            light: '#F3E5AB',
+                            DEFAULT: '#D4AF37',
+                            dark: '#AA8C2C',
+                        }
+                    },
+                    fontFamily: {
+                        'playfair': ['"Playfair Display"', 'serif'],
+                        'amiri': ['"Amiri"', 'serif'],
+                        'montserrat': ['"Montserrat"', 'sans-serif'],
+                        'vibes': ['"Great Vibes"', 'cursive'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 4s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Advanced Animations and Layouts -->
+    <style>
+        body {
+            background-color: #064E3B; /* Deep Emerald */
+            color: #F3E5AB;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Prevent scrolling when cover is active */
+        body.locked {
+            overflow: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #032e22; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 4px; }
+
+        /* ADVANCED ANIMATIONS */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Clip-path reveal for images (Advanced effect) */
+        .clip-reveal {
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+            transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .clip-reveal.active {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+        /* Scale reveal */
+        .scale-reveal {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .scale-reveal.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Stagger delays */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        .slow-zoom {
+            animation: slowZoom 25s infinite alternate ease-in-out;
+        }
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+
+        /* Architectural Shapes */
+        .arch-shape {
+            border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+            border-top-left-radius: 999px;
+            border-top-right-radius: 999px;
+        }
+
+        .text-gold-gradient {
+            background: linear-gradient(to right, #D4AF37, #F3E5AB, #D4AF37, #AA8C2C);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 5s linear infinite;
+        }
+        @keyframes gradientMove {
+            to { background-position: 200% center; }
+        }
+
+        .pattern-overlay {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* Cover transition */
+        #cover-page {
+            transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1), opacity 1.2s ease-in-out;
+        }
+        #cover-page.open {
+            transform: translateY(-100vh);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .music-paused { animation-play-state: paused !important; }
+        
+        /* Advanced Gallery Hover */
+        .gallery-img { transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s; filter: grayscale(30%) brightness(90%); }
+        .gallery-item:hover .gallery-img { transform: scale(1.08); filter: grayscale(0%) brightness(100%); }
+    </style>
+</head>
+<body class="font-montserrat antialiased relative locked">
+
+    <!-- AUDIO ELEMENT -->
+    <!-- Using a reliable dummy audio file -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/10/18/audio_31c2730e64.mp3?filename=cinematic-documentary-115669.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- FLOATING MUSIC BUTTON -->
+    <button id="musicToggle" class="fixed bottom-6 right-6 z-40 w-12 h-12 bg-emerald-950 border border-gold rounded-full flex items-center justify-center text-gold shadow-[0_0_15px_rgba(212,175,55,0.4)] opacity-0 translate-y-10 transition-all duration-700 animate-spin-slow">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 14.5a4.5 4.5 0 110-9 4.5 4.5 0 010 9zm0-7a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/></svg>
+    </button>
+
+    <!-- COVER PAGE -->
+    <div id="cover-page" class="fixed inset-0 z-50 bg-emerald-950 flex flex-col items-center justify-center overflow-hidden">
+        <!-- Dome SVG Background -->
+        <div class="absolute top-0 inset-x-0 flex justify-center opacity-30 pointer-events-none slow-zoom h-[60vh]">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full fill-gold">
+                <path d="M0,100 C0,40 20,0 50,0 C80,0 100,40 100,100 Z" opacity="0.4"/>
+                <path d="M15,100 C15,50 30,15 50,15 C70,15 85,50 85,100 Z" opacity="0.6"/>
+            </svg>
+        </div>
+        
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-950/90"></div>
+
+        <!-- Cover Content -->
+        <div class="relative z-10 text-center px-6 flex flex-col items-center max-w-lg mx-auto reveal-up active delay-100">
+            <h3 class="font-amiri text-gold text-xl md:text-2xl mb-4">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</h3>
+            <p class="uppercase tracking-[0.3em] text-xs md:text-sm text-gold-light mb-6">The Wedding Of</p>
+            
+            <h1 class="font-vibes text-7xl md:text-9xl text-gold-gradient mb-8 leading-tight drop-shadow-2xl">
+                James & Julia
+            </h1>
+            
+            <div class="bg-emerald-900/50 backdrop-blur-sm border border-gold/30 rounded-2xl p-6 mb-8 w-full">
+                <p class="text-sm text-gray-300 font-light mb-2">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+                <h4 class="font-playfair text-2xl text-gold font-semibold">Tamu Undangan</h4>
+                <p class="text-xs text-gray-400 mt-2 italic">*Mohon maaf bila ada kesalahan penulisan nama/gelar</p>
+            </div>
+
+            <button id="btnOpen" class="bg-gold text-emerald-950 px-8 py-3 rounded-full font-bold hover:bg-gold-light hover:shadow-[0_0_20px_rgba(212,175,55,0.6)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 w-max">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M14 7h.01M9 16h6v-6h-6v6z"></path></svg>
+                Buka Undangan
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="fixed inset-0 pattern-overlay z-0"></div>
+    <div id="main-wrapper" class="relative z-10 opacity-0 transition-opacity duration-1000 delay-500">
+
+        <!-- 1. HERO SECTION -->
+        <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <!-- Parallax Background Image -->
+            <div class="absolute inset-0">
+                <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2000" alt="Prewedding Hero" class="w-full h-full object-cover filter brightness-[0.25] sepia-[0.3] hue-rotate-180 slow-zoom">
+                <div class="absolute inset-0 bg-gradient-radial from-transparent to-emerald-950/90"></div>
+            </div>
+
+            <div class="text-center z-10 px-6 max-w-4xl mx-auto flex flex-col items-center">
+                <p class="uppercase tracking-[0.4em] text-sm md:text-base text-gold-light mb-6 reveal-up delay-100">Welcome To Our Wedding</p>
+                <h1 class="font-vibes text-6xl md:text-8xl lg:text-9xl text-gold-gradient mb-6 leading-tight reveal-up delay-200">
+                    James & Julia
+                </h1>
+                <div class="w-32 h-[1px] bg-gold mx-auto mb-6 reveal-up delay-300"></div>
+                <p class="font-playfair text-xl md:text-3xl text-gold-light italic tracking-wide reveal-up delay-400">
+                    15 . 11 . 2026
+                </p>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce opacity-70">
+                <span class="text-xs tracking-widest uppercase text-gold mb-2 font-light">Scroll Down</span>
+                <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
+        </section>
+
+        <!-- 2. QURAN VERSE SECTION -->
+        <section class="py-24 px-6 relative flex justify-center">
+            <!-- Decorative border lines -->
+            <div class="absolute top-0 bottom-0 left-8 md:left-24 w-px bg-gradient-to-b from-transparent via-gold/30 to-transparent"></div>
+            <div class="absolute top-0 bottom-0 right-8 md:right-24 w-px bg-gradient-to-b from-transparent via-gold/30 to-transparent"></div>
+
+            <div class="max-w-3xl mx-auto text-center reveal-up">
+                <!-- Advanced Islamic geometric icon -->
+                <div class="w-16 h-16 mx-auto mb-10 relative animate-float">
+                    <div class="absolute inset-0 border-2 border-gold rotate-45 transition-transform duration-1000 hover:rotate-90"></div>
+                    <div class="absolute inset-0 border-2 border-gold/50 rotate-12 transition-transform duration-1000 hover:rotate-[102deg]"></div>
+                    <div class="absolute inset-2 bg-gold rotate-45 flex items-center justify-center overflow-hidden">
+                        <div class="w-full h-full bg-emerald-950 scale-[0.8]"></div>
+                    </div>
+                </div>
+
+                <p class="font-amiri text-2xl md:text-4xl text-gold mb-8 leading-loose tracking-wide" dir="rtl">
+                    وَمِنْ ءَايَٰتِهِۦٓ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَٰجًا لِّتَسْكُنُوٓا۟ إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً
+                </p>
+                <p class="font-montserrat text-sm md:text-base text-gray-300 leading-relaxed font-light italic">
+                    "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang."
+                </p>
+                <p class="font-playfair font-bold text-gold mt-6 tracking-widest uppercase text-xs">(QS. Ar-Rum: 21)</p>
+            </div>
+        </section>
+
+        <!-- 3. THE COUPLE SECTION -->
+        <section class="py-24 bg-gradient-to-b from-emerald-950 via-[#043d2c] to-emerald-950 relative border-y border-gold/10">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center mb-20 reveal-up">
+                    <p class="text-gold tracking-[0.3em] uppercase text-xs mb-3">Sang Mempelai</p>
+                    <h2 class="font-playfair text-4xl md:text-5xl text-gold-light mb-6">Dua Hati Menjadi Satu</h2>
+                    <p class="text-gray-400 font-light max-w-xl mx-auto text-sm md:text-base leading-relaxed">Maha Suci Allah yang telah menautkan dua hati hamba-Nya untuk melangkah bersama dalam ikatan suci pernikahan.</p>
+                </div>
+
+                <div class="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-8">
+                    
+                    <!-- Groom -->
+                    <div class="flex-1 flex flex-col items-center reveal-up delay-100 text-center group w-full max-w-sm">
+                        <div class="relative p-3 rounded-t-full rounded-b-xl border border-gold/30 mb-8 transition-all duration-700 group-hover:border-gold group-hover:shadow-[0_10px_30px_rgba(212,175,55,0.2)]">
+                            <div class="w-56 h-72 md:w-64 md:h-80 overflow-hidden arch-shape relative z-10 clip-reveal active">
+                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400" alt="James" class="w-full h-full object-cover filter brightness-90 group-hover:scale-110 transition-transform duration-1000 ease-out">
+                                <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent to-transparent opacity-80"></div>
+                            </div>
+                        </div>
+                        <h3 class="font-vibes text-5xl md:text-6xl text-gold mb-2">James</h3>
+                        <p class="font-playfair font-bold text-xl text-white mb-3">James Anderson</p>
+                        <div class="w-12 h-px bg-gold/50 mb-3"></div>
+                        <p class="text-sm text-gray-400 font-light leading-relaxed">Putra dari<br><span class="text-white font-medium">Bapak Fulan & Ibu Fulanah</span></p>
+                        <a href="#" class="mt-5 text-gold/70 hover:text-gold transition-colors">
+                            <svg class="w-5 h-5 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        </a>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="font-vibes text-7xl text-gold opacity-50 scale-reveal delay-300 lg:px-4">&</div>
+
+                    <!-- Bride -->
+                    <div class="flex-1 flex flex-col items-center reveal-up delay-200 text-center group w-full max-w-sm">
+                        <div class="relative p-3 rounded-t-full rounded-b-xl border border-gold/30 mb-8 transition-all duration-700 group-hover:border-gold group-hover:shadow-[0_10px_30px_rgba(212,175,55,0.2)]">
+                            <div class="w-56 h-72 md:w-64 md:h-80 overflow-hidden arch-shape relative z-10 clip-reveal active">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" alt="Julia" class="w-full h-full object-cover filter brightness-90 group-hover:scale-110 transition-transform duration-1000 ease-out">
+                                <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent to-transparent opacity-80"></div>
+                            </div>
+                        </div>
+                        <h3 class="font-vibes text-5xl md:text-6xl text-gold mb-2">Julia</h3>
+                        <p class="font-playfair font-bold text-xl text-white mb-3">Julia Heart</p>
+                        <div class="w-12 h-px bg-gold/50 mb-3"></div>
+                        <p class="text-sm text-gray-400 font-light leading-relaxed">Putri dari<br><span class="text-white font-medium">Bapak Fulan & Ibu Fulanah</span></p>
+                        <a href="#" class="mt-5 text-gold/70 hover:text-gold transition-colors">
+                            <svg class="w-5 h-5 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. EVENT DETAILS SECTION -->
+        <section class="py-24 px-6 relative overflow-hidden">
+            <!-- Large faint text background -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-vibes text-[15rem] text-gold/5 whitespace-nowrap pointer-events-none">Save the Date</div>
+            
+            <div class="max-w-5xl mx-auto relative z-10">
+                <div class="text-center mb-16 reveal-up">
+                    <p class="text-gold tracking-[0.3em] uppercase text-xs mb-3">Waktu & Tempat</p>
+                    <h2 class="font-playfair text-3xl md:text-5xl text-white mb-4">Rangkaian Acara</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 relative">
+                    <!-- Akad Card -->
+                    <div class="relative bg-emerald-900/40 backdrop-blur-md border border-gold/40 p-8 md:p-12 text-center rounded-t-full rounded-b-2xl scale-reveal delay-100 hover:bg-emerald-900/60 transition-colors duration-500">
+                        <div class="w-16 h-16 mx-auto bg-gold/10 rounded-full flex items-center justify-center mb-8 border border-gold/50">
+                            <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
+                        </div>
+                        <h3 class="font-playfair text-3xl text-gold mb-2">Akad Nikah</h3>
+                        <p class="font-montserrat text-white text-lg font-medium mb-1">Minggu, 15 November 2026</p>
+                        <p class="text-gold-light text-sm mb-6">Pukul 08.00 WIB - Selesai</p>
+                        
+                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6"></div>
+                        
+                        <p class="font-bold text-white mb-2 text-lg">Masjid Kubah Emas Dian Al-Mahri</p>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-8">
+                            Jl. Meruyung Raya, Meruyung, Kec. Limo, Kota Depok, Jawa Barat 16515
+                        </p>
+                        
+                        <a href="https://maps.google.com" target="_blank" class="inline-block border border-gold text-gold hover:bg-gold hover:text-emerald-950 px-8 py-3 rounded-full text-sm font-semibold transition-all shadow-[0_0_10px_rgba(212,175,55,0.2)] hover:shadow-[0_0_20px_rgba(212,175,55,0.6)]">
+                            Google Maps
+                        </a>
+                    </div>
+
+                    <!-- Resepsi Card -->
+                    <div class="relative bg-emerald-900/40 backdrop-blur-md border border-gold/40 p-8 md:p-12 text-center rounded-t-full rounded-b-2xl scale-reveal delay-300 hover:bg-emerald-900/60 transition-colors duration-500 mt-8 lg:mt-16">
+                         <div class="w-16 h-16 mx-auto bg-gold/10 rounded-full flex items-center justify-center mb-8 border border-gold/50">
+                            <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"/></svg>
+                        </div>
+                        <h3 class="font-playfair text-3xl text-gold mb-2">Resepsi</h3>
+                        <p class="font-montserrat text-white text-lg font-medium mb-1">Minggu, 15 November 2026</p>
+                        <p class="text-gold-light text-sm mb-6">Pukul 11.00 WIB - 14.00 WIB</p>
+                        
+                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6"></div>
+                        
+                        <p class="font-bold text-white mb-2 text-lg">Gedung Serbaguna Kubah Emas</p>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-8">
+                            Area Komplek Masjid Dian Al-Mahri, Limo, Kota Depok, Jawa Barat 16515
+                        </p>
+                        
+                        <a href="https://maps.google.com" target="_blank" class="inline-block border border-gold text-gold hover:bg-gold hover:text-emerald-950 px-8 py-3 rounded-full text-sm font-semibold transition-all shadow-[0_0_10px_rgba(212,175,55,0.2)] hover:shadow-[0_0_20px_rgba(212,175,55,0.6)]">
+                            Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ADVANCED GALLERY SECTION -->
+        <section class="py-24 bg-emerald-950 relative border-t border-gold/10">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16 reveal-up">
+                    <p class="text-gold tracking-[0.3em] uppercase text-xs mb-3">Galeri Kebahagiaan</p>
+                    <h2 class="font-playfair text-3xl md:text-5xl text-white mb-4">Momen Indah Kami</h2>
+                </div>
+
+                <!-- Editorial Asymmetrical Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 auto-rows-[250px] md:auto-rows-[300px]">
+                    <!-- Item 1: Large portrait, curved top -->
+                    <div class="gallery-item md:col-span-5 md:row-span-2 relative overflow-hidden rounded-t-full rounded-b-xl clip-reveal group shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800" alt="Gallery 1" class="gallery-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gold/10 mix-blend-overlay"></div>
+                    </div>
+                    
+                    <!-- Item 2: Landscape, curved bottom right -->
+                    <div class="gallery-item md:col-span-7 md:row-span-1 relative overflow-hidden rounded-tr-xl rounded-br-[100px] rounded-l-xl clip-reveal delay-100 group shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1616422285623-149b0625ce25?q=80&w=800" alt="Gallery 2" class="gallery-img w-full h-full object-cover" style="object-position: center 30%;">
+                    </div>
+                    
+                    <!-- Item 3: Square, perfect circle -->
+                    <div class="gallery-item md:col-span-4 md:row-span-1 relative overflow-hidden rounded-full clip-reveal delay-200 group shadow-xl hidden md:block">
+                        <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=400" alt="Gallery 3" class="gallery-img w-full h-full object-cover">
+                    </div>
+                    
+                    <!-- Item 4: Detail shot, soft corners -->
+                    <div class="gallery-item md:col-span-3 md:row-span-1 relative overflow-hidden rounded-3xl clip-reveal delay-300 group shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=400" alt="Gallery 4" class="gallery-img w-full h-full object-cover">
+                    </div>
+                    
+                    <!-- Item 5: Wide landscape across bottom -->
+                    <div class="gallery-item md:col-span-12 md:row-span-1 relative overflow-hidden rounded-[40px] clip-reveal group shadow-xl mt-4 md:mt-0">
+                        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200" alt="Gallery 5" class="gallery-img w-full h-full object-cover" style="object-position: center 60%;">
+                        <div class="absolute inset-0 bg-emerald-950/20 mix-blend-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. RSVP & WISHES SECTION -->
+        <section class="py-24 px-6 relative bg-gradient-to-b from-emerald-950 to-[#021f16]">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-[#054030] border border-gold/40 p-8 md:p-14 rounded-[40px] rounded-tr-none rounded-bl-none reveal-up shadow-2xl relative overflow-hidden">
+                    
+                    <!-- Decorative architectural lines bg -->
+                    <div class="absolute inset-0 opacity-10 pointer-events-none">
+                         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#D4AF37" stroke-width="1"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                        </svg>
+                    </div>
+
+                    <div class="text-center mb-10 relative z-10">
+                        <h2 class="font-playfair text-3xl md:text-4xl text-gold mb-4">Buku Tamu & RSVP</h2>
+                        <p class="text-gray-300 font-light text-sm md:text-base">Kehadiran dan doa Anda sangat bermakna bagi kami.</p>
+                    </div>
+
+                    <form class="space-y-6 relative z-10" onsubmit="event.preventDefault(); alert('Terima kasih atas doa dan konfirmasi kehadiran Anda!');">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gold mb-2">Nama Lengkap</label>
+                                <input type="text" required class="w-full bg-emerald-950/50 border-b-2 border-gold/40 px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-colors" placeholder="Tulis nama Anda">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gold mb-2">Kehadiran</label>
+                                <select class="w-full bg-emerald-950/50 border-b-2 border-gold/40 px-4 py-3 text-white focus:outline-none focus:border-gold transition-colors appearance-none cursor-pointer">
+                                    <option value="hadir">Ya, Saya akan hadir</option>
+                                    <option value="tidak_hadir">Maaf, Saya tidak bisa hadir</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gold mb-2">Jumlah Tamu</label>
+                            <select class="w-full bg-emerald-950/50 border-b-2 border-gold/40 px-4 py-3 text-white focus:outline-none focus:border-gold transition-colors appearance-none cursor-pointer">
+                                <option value="1">1 Orang</option>
+                                <option value="2">2 Orang</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gold mb-2">Pesan & Doa</label>
+                            <textarea required rows="4" class="w-full bg-emerald-950/50 border border-gold/40 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-colors resize-none mt-2" placeholder="Berikan ucapan dan doa terbaik Anda..."></textarea>
+                        </div>
+                        <div class="text-center pt-6">
+                            <button type="submit" class="bg-gold text-emerald-950 font-bold py-4 px-12 rounded-full hover:bg-gold-light hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] transition-all transform hover:-translate-y-1 tracking-wide uppercase text-sm">
+                                Kirim Ucapan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-16 text-center border-t border-gold/20 relative overflow-hidden bg-[#01140e]">
+            <!-- Subtle slow rotating geometric star bg -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-gold/5 rounded-full animate-spin-slow pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-gold/10 rotate-45 pointer-events-none"></div>
+            
+            <div class="relative z-10">
+                <p class="font-amiri text-gold text-xl mb-4">جَزَاكُمُ اللَّهُ خَيْرًا</p>
+                <h2 class="font-vibes text-5xl md:text-6xl text-gold mb-6 drop-shadow-lg">James & Julia</h2>
+                <p class="text-xs text-gray-400 tracking-[0.2em] uppercase font-light">Thank you for your prayers and blessings</p>
+            </div>
+        </footer>
+
+    </div> <!-- End Main Wrapper -->
+
+    <!-- JAVASCRIPT FOR ANIMATIONS AND INTERACTIONS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnOpen = document.getElementById('btnOpen');
+            const coverPage = document.getElementById('cover-page');
+            const mainWrapper = document.getElementById('main-wrapper');
+            const bgMusic = document.getElementById('bgMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            const body = document.body;
+            let isPlaying = false;
+
+            // --- Cover Page Logic ---
+            btnOpen.addEventListener('click', () => {
+                // Animate cover out
+                coverPage.classList.add('open');
+                // Unlock scroll
+                body.classList.remove('locked');
+                // Show main content
+                mainWrapper.classList.remove('opacity-0');
+                
+                // Play music
+                bgMusic.play().then(() => {
+                    isPlaying = true;
+                    // Show music toggle button with a slight delay
+                    setTimeout(() => {
+                        musicToggle.classList.remove('opacity-0', 'translate-y-10');
+                    }, 1000);
+                }).catch(err => console.log("Audio play prevented by browser policy", err));
+            });
+
+            // --- Music Toggle Logic ---
+            musicToggle.addEventListener('click', () => {
+                if (isPlaying) {
+                    bgMusic.pause();
+                    musicToggle.classList.add('music-paused');
+                    musicToggle.classList.add('opacity-50');
+                } else {
+                    bgMusic.play();
+                    musicToggle.classList.remove('music-paused');
+                    musicToggle.classList.remove('opacity-50');
+                }
+                isPlaying = !isPlaying;
+            });
+
+            // --- Advanced Scroll Animations ---
+            const animationObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Optional: Unobserve after animating so it only happens once
+                        // animationObserver.unobserve(entry.target); 
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            // Select elements with advanced animation classes
+            const animatedElements = document.querySelectorAll('.reveal-up, .clip-reveal, .scale-reveal');
+            animatedElements.forEach(el => animationObserver.observe(el));
+            
+            // Trigger cover elements immediately
+            setTimeout(() => {
+                document.querySelectorAll('#cover-page .reveal-up').forEach(el => el.classList.add('active'));
+            }, 100);
+        });
+    </script>
+</body>
+</html>
