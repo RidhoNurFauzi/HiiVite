@@ -30,6 +30,10 @@ function previewUrl(product) {
 export function openPreview(product) {
   activeProduct = product;
   titleEl.textContent = product.name;
+  
+  // Sesuaikan teks tombol jika produk adalah desain custom
+  useBtn.textContent = product.is_custom ? 'Customize via WhatsApp' : 'Use This Template';
+  
   frame.src = previewUrl(product);
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -38,7 +42,7 @@ export function openPreview(product) {
 export function closePreview() {
   modal.classList.remove('open');
   document.body.style.overflow = '';
-  frame.src = 'about:blank';
+  frame.src = 'about:blank'; // Menghentikan loading iframe di background
   activeProduct = null;
 }
 

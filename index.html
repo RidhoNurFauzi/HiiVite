@@ -36,7 +36,7 @@
       },
     };
   </script>
- 
+  
   <style>
     html { scroll-behavior: smooth; }
     section[id] { scroll-margin-top: 4.5rem; }
@@ -139,7 +139,8 @@
   <meta name="twitter:description" content="Pick a ready-made template and pay instantly with QRIS, or work with our developer on a custom design." />
   <meta name="twitter:image" content="https://hiivite-weeding-invitation.netlify.app/og-image.png" />
 
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+  <!-- BUG FIX: Mengizinkan CDN Tailwind dan Inline script -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;">
 </head>
 
 <body class="bg-cream text-ink">

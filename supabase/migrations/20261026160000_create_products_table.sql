@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS products (
   is_custom boolean NOT NULL DEFAULT false,
   is_active boolean NOT NULL DEFAULT true,
   sort_order int NOT NULL DEFAULT 0,
+  preview_url text,
+  template_url text,
   created_at timestamptz DEFAULT now()
 );
 

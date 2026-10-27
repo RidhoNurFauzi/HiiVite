@@ -15,6 +15,7 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const WHATSAPP_RSVP_PRICE = 50000;
+const DEV_WHATSAPP = '6281316065637';
 
 const formatIDR = (n) => 'IDR ' + Number(n).toLocaleString('id-ID');
 
@@ -37,6 +38,13 @@ const els = {
   customerEmail: $('customer_email'),
   customerPhone: $('customer_phone'),
   whatsappRsvp: $('whatsapp_rsvp'),
+
+  // Input Kustomisasi Tambahan (Opsional)
+  bridePhotoUrl: $('bride_photo_url'),
+  groomPhotoUrl: $('groom_photo_url'),
+  backgroundMusicUrl: $('background_music_url'),
+  galleryUrl1: $('gallery_url_1'),
+  galleryUrl2: $('gallery_url_2'),
 
   summaryProductName: $('summaryProductName'),
   summaryBase: $('summaryBase'),
@@ -66,6 +74,16 @@ let selectedProduct = null;
 let countdownInterval = null;
 let pollInterval = null;
 let currentOrderId = null;
+
+// ============================================================
+// WhatsApp URL Builder untuk Produk Custom
+// ============================================================
+function buildCustomWaUrl(productName) {
+  const text = productName
+    ? `Hello, I'm interested in the custom invitation "${productName}" from Hiivite.`
+    : "Hello, I'm interested in a custom wedding invitation from Hiivite.";
+  return `https://wa.me/${DEV_WHATSAPP}?text=${encodeURIComponent(text)}`;
+}
 
 // ============================================================
 // Product catalog
@@ -121,11 +139,17 @@ function renderProductCard(p) {
     </div>
   `;
 
-  // One listener per card: Preview opens the modal, Buy Now selects right away.
   card.addEventListener('click', (e) => {
     const action = e.target.closest('[data-action]')?.dataset.action;
-    if (action === 'preview') openPreview(p);
-    else if (action === 'buy') selectProduct(p, card);
+    if (action === 'preview') {
+      openPreview(p);
+    } else if (action === 'buy') {
+      if (p.is_custom) {
+        window.open(buildCustomWaUrl(p.name), '_blank', 'noopener,noreferrer');
+      } else {
+        selectProduct(p, card);
+      }
+    }
   });
 
   return card;
@@ -134,7 +158,6 @@ function renderProductCard(p) {
 function selectProduct(product, cardEl) {
   selectedProduct = product;
 
-  // Highlight the chosen card, dim the others.
   document.querySelectorAll('#productGrid > div').forEach((c) => {
     c.classList.remove('ring-2', 'ring-gold', 'border-gold');
     c.classList.add('border-gold/15');
@@ -144,22 +167,22 @@ function selectProduct(product, cardEl) {
     cardEl.classList.add('ring-2', 'ring-gold', 'border-gold');
   }
 
-  // Reveal the order form, hide the "no selection" prompt.
   els.noSelectionPrompt.classList.add('hidden');
   els.form.classList.remove('hidden');
 
-  // Update the summary with the product name + price.
   els.summaryProductName.textContent = product.name;
   recalculate();
 
-  // Scroll to the order form.
   els.form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// "Use This Template" inside the preview modal → same as Buy Now.
 initPreview((product) => {
   const card = els.productGrid.querySelector(`[data-product-id="${product.id}"]`);
-  selectProduct(product, card);
+  if (product.is_custom) {
+    window.open(buildCustomWaUrl(product.name), '_blank', 'noopener,noreferrer');
+  } else {
+    selectProduct(product, card);
+  }
 });
 
 // ============================================================
@@ -254,6 +277,11 @@ els.form.addEventListener('submit', async (e) => {
     return;
   }
 
+  // Kumpulkan URL galeri jika elemennya ada
+  const galleries = [];
+  if (els.galleryUrl1 && els.galleryUrl1.value.trim()) galleries.push(els.galleryUrl1.value.trim());
+  if (els.galleryUrl2 && els.galleryUrl2.value.trim()) galleries.push(els.galleryUrl2.value.trim());
+
   const payload = {
     product_id: selectedProduct.id,
     product_name: selectedProduct.name,
@@ -264,6 +292,13 @@ els.form.addEventListener('submit', async (e) => {
     event_date: els.eventDate.value,
     venue_url: els.venueUrl.value.trim(),
     whatsapp_rsvp: els.whatsappRsvp.checked,
+    
+    // Data Kustomisasi Foto & Musik dari Pembeli
+    bride_photo_url: els.bridePhotoUrl ? els.bridePhotoUrl.value.trim() : '',
+    groom_photo_url: els.groomPhotoUrl ? els.groomPhotoUrl.value.trim() : '',
+    background_music_url: els.backgroundMusicUrl ? els.backgroundMusicUrl.value.trim() : '',
+    gallery_urls: galleries,
+
     customer_email: els.customerEmail.value.trim(),
     customer_phone: els.customerPhone.value.trim(),
   };
@@ -344,7 +379,6 @@ function startCountdown(expiresAtIso) {
       els.countdownTimer.classList.add('text-red-600');
       clearInterval(countdownInterval);
       showStatus('The payment window has expired. Checking final status...');
-      // Beri waktu 30 detik untuk notifikasi yang terlambat, lalu berhenti
       setTimeout(() => {
         clearInterval(pollInterval);
         if (els.paymentSuccess.classList.contains('hidden')) {
@@ -364,8 +398,7 @@ function startCountdown(expiresAtIso) {
 }
 
 // ============================================================
-// Status polling (via get_order_status(); anon tidak punya akses
-// langsung ke tabel orders)
+// Status polling
 // ============================================================
 let pollBusy = false;
 const FAILED_STATUSES = ['expire', 'cancel', 'deny', 'failure', 'failed'];
@@ -374,7 +407,6 @@ function showPaid(order) {
   clearInterval(pollInterval);
   clearInterval(countdownInterval);
 
-  // Sembunyikan kartu QR supaya tidak dibayar dua kali
   els.qrisImage.parentElement.classList.add('hidden');
   els.paymentSuccess.classList.remove('hidden');
 
@@ -386,8 +418,8 @@ function showPaid(order) {
   }
 
   const invoiceUrl = `${window.location.origin}/invoice.html?o=${encodeURIComponent(currentOrderId)}`;
-    els.invoiceLink.href = invoiceUrl;
-    els.waInvoiceBtn.href =
+  els.invoiceLink.href = invoiceUrl;
+  els.waInvoiceBtn.href =
     'https://wa.me/?text=' +
     encodeURIComponent(
       `Invoice Hiivite ${currentOrderId}\n${invoiceUrl}` +
@@ -440,7 +472,6 @@ function startPolling(orderId) {
   pollInterval = setInterval(() => checkOrderStatus(orderId), 3000);
 }
 
-// Pembeli kembali dari aplikasi e-wallet: cek status saat itu juga
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && currentOrderId) {
     checkOrderStatus(currentOrderId);
@@ -450,16 +481,6 @@ window.addEventListener('focus', () => {
   if (currentOrderId) checkOrderStatus(currentOrderId);
 });
 
-
-const DEV_WHATSAPP = '6281316065637';
-
-function buildCustomWaUrl(productName) {
-  const text = productName
-    ? `Hello, I'm interested in the custom invitation "${productName}" from Hiivite.`
-    : "Hello, I'm interested in a custom wedding invitation from Hiivite.";
-  return `https://wa.me/${DEV_WHATSAPP}?text=${encodeURIComponent(text)}`;
-}
-
 els.copyQrisBtn.addEventListener('click', async () => {
   const url = els.copyQrisBtn.dataset.url;
   if (!url) return;
@@ -467,7 +488,6 @@ els.copyQrisBtn.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(url);
   } catch (_) {
-    // Cadangan untuk browser yang menolak clipboard API
     const ta = document.createElement('textarea');
     ta.value = url;
     document.body.appendChild(ta);

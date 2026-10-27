@@ -1,14 +1,21 @@
-alter table products
-  add column if not exists preview_url text,
-  add column if not exists template_url text;
+/*
+# Add templates, preview URLs, and invoice tracking
+*/
 
-alter table orders
-  add column if not exists invoice_sent_at timestamptz;
+ALTER TABLE products
+  ADD COLUMN IF NOT EXISTS preview_url text,
+  ADD COLUMN IF NOT EXISTS template_url text;
 
--- Hubungkan tiap produk ke file template-nya (sesuaikan slug produkmu)
-update products set template_url = '/templates/classic-gold.html',
-                    preview_url  = '/templates/classic-gold.html'
- where slug = 'classic-elegance';
-update products set template_url = '/templates/floral-green.html',
-                    preview_url  = '/templates/floral-green.html'
- where slug = 'floral-garden';
+ALTER TABLE orders
+  ADD COLUMN IF NOT EXISTS invoice_sent_at timestamptz;
+
+-- Hubungkan tiap produk ke file template-nya (sesuai struktur folder public/templates)
+UPDATE products 
+SET template_url = '/templates/classic-gold.html',
+    preview_url  = '/templates/classic-gold.html'
+WHERE slug = 'classic-elegance';
+
+UPDATE products 
+SET template_url = '/templates/floral-green.html',
+    preview_url  = '/templates/floral-green.html'
+WHERE slug = 'floral-garden';

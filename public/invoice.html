@@ -28,7 +28,10 @@
   <div id="out" class="card">Memuat invoice…</div>
 </div>
 <script>
+  // PERBAIKAN: API Gateway Supabase mewajibkan Anon Key agar request tidak ditolak (401 Unauthorized)
   var API = 'https://dfzfdctinntceledejds.supabase.co/functions/v1/get-invitation';
+  var ANON_KEY = 'ISI_DENGAN_SUPABASE_ANON_KEY_ANDA'; // <-- Ganti dengan string VITE_SUPABASE_ANON_KEY Anda
+  
   var DEV_WA = '6281316065637';
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
@@ -36,14 +39,24 @@
   var id = new URLSearchParams(location.search).get('o');
   var out = document.getElementById('out');
 
-  if (!id) { out.textContent = 'Invoice tidak ditemukan.'; }
-  else fetch(API + '?o=' + encodeURIComponent(id))
+  if (!id) { 
+    out.textContent = 'Invoice tidak ditemukan.'; 
+  } else {
+    // PERBAIKAN: Sisipkan apikey dan Authorization header ke dalam fetch
+    fetch(API + '?o=' + encodeURIComponent(id), {
+      method: 'GET',
+      headers: {
+        'apikey': ANON_KEY,
+        'Authorization': 'Bearer ' + ANON_KEY
+      }
+    })
     .then(function (r) { if (!r.ok) throw 0; return r.json(); })
     .then(function (o) {
       var who = o.category === 'greeting_card'
         ? esc(o.sender_name) + ' → ' + esc(o.recipient_name)
         : esc(o.groom_name) + ' &amp; ' + esc(o.bride_name);
       var paid = new Date(o.paid_at).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', dateStyle: 'long', timeStyle: 'short' });
+      
       out.innerHTML =
         '<p class="lbl" style="margin-top:0">No. Invoice</p><p class="val">' + esc(o.order_id) + '</p>' +
         '<p class="lbl">Dibayar pada</p><p class="val">' + esc(paid) + ' WIB <span class="paid">· LUNAS</span></p>' +
@@ -59,6 +72,7 @@
         '</div>';
     })
     .catch(function () { out.textContent = 'Invoice tidak ditemukan atau pembayaran belum selesai.'; });
+  }
 </script>
 </body>
 </html>

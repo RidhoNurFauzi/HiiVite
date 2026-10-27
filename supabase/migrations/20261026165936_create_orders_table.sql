@@ -23,6 +23,12 @@ CREATE TABLE IF NOT EXISTS orders (
   venue_url text,
   whatsapp_rsvp boolean NOT NULL DEFAULT false,
 
+  -- Data Kustomisasi Pembeli (Foto & Musik)
+  bride_photo_url text,
+  groom_photo_url text,
+  gallery_urls text[],
+  background_music_url text,
+
   -- Data kartu ucapan
   recipient_name text,
   sender_name text,
@@ -33,7 +39,7 @@ CREATE TABLE IF NOT EXISTS orders (
   customer_email text,
   customer_phone text,
 
-  -- Pembayaran
+  -- Pembayaran & Invoice
   base_price bigint NOT NULL,
   addon_price bigint NOT NULL DEFAULT 0,
   total_price bigint NOT NULL,
@@ -43,6 +49,7 @@ CREATE TABLE IF NOT EXISTS orders (
   invitation_link text,
   expires_at timestamptz,
   paid_at timestamptz,
+  invoice_sent_at timestamptz,
   created_at timestamptz DEFAULT now()
 );
 
@@ -57,7 +64,7 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON orders FROM anon, authenticated;
 GRANT SELECT, INSERT, UPDATE ON orders TO service_role;
 
--- Function cek status untuk frontend (hanya 3 kolom yang diperlukan)
+-- Function cek status untuk frontend (hanya kolom yang diperlukan)
 CREATE OR REPLACE FUNCTION public.get_order_status(p_order_id text)
 RETURNS TABLE (order_id text, status text, invitation_link text)
 LANGUAGE sql

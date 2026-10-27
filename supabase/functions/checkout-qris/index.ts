@@ -49,6 +49,11 @@ function parseOrderPayload(body: Record<string, unknown>) {
     eventDate: str(body.event_date),
     venueUrl: str(body.venue_url),
     whatsappRsvp: !!body.whatsapp_rsvp,
+    // Kustomisasi Foto & Musik dari Pembeli
+    bridePhotoUrl: str(body.bride_photo_url),
+    groomPhotoUrl: str(body.groom_photo_url),
+    galleryUrls: Array.isArray(body.gallery_urls) ? body.gallery_urls.map(String) : [],
+    backgroundMusicUrl: str(body.background_music_url),
     // kartu ucapan
     recipientName: str(body.recipient_name),
     senderName: str(body.sender_name),
@@ -159,7 +164,7 @@ Deno.serve(async (req) => {
     const expiresAt = new Date(Date.now() + QRIS_EXPIRY_MINUTES * 60 * 1000).toISOString();
 
     const itemDetails = [
-      { id: product.id.slice(0, 20), name: String(product.name).slice(0, 50), price: basePrice, quantity: 1 },
+      { id: product.id.slice(0, 50), name: String(product.name).slice(0, 50), price: basePrice, quantity: 1 },
     ];
     if (useRsvp) {
       itemDetails.push({ id: "ADD-WA-RSVP", name: "WhatsApp RSVP Feature", price: WHATSAPP_RSVP_PRICE, quantity: 1 });
@@ -175,6 +180,11 @@ Deno.serve(async (req) => {
       event_date: isCard ? null : d.eventDate,
       venue_url: isCard ? null : d.venueUrl || null,
       whatsapp_rsvp: useRsvp,
+      // Data Kustomisasi Pembeli (Foto & Musik)
+      bride_photo_url: isCard ? null : d.bridePhotoUrl || null,
+      groom_photo_url: isCard ? null : d.groomPhotoUrl || null,
+      gallery_urls: isCard ? null : d.galleryUrls,
+      background_music_url: isCard ? null : d.backgroundMusicUrl || null,
       // kartu ucapan
       recipient_name: isCard ? d.recipientName : null,
       sender_name: isCard ? d.senderName : null,

@@ -1,5 +1,8 @@
 (function () {
   var API = 'https://dfzfdctinntceledejds.supabase.co/functions/v1/get-invitation';
+  // PERBAIKAN: Masukkan Supabase Anon Key Anda di sini
+  var ANON_KEY = 'ISI_DENGAN_SUPABASE_ANON_KEY_ANDA';
+
   var params = new URLSearchParams(location.search);
   var orderId = params.get('o');
   var SAMPLE = { groom_name: 'Raka Pratama', bride_name: 'Andini Kirana', event_date: '2026-12-12', venue_url: '' };
@@ -73,7 +76,15 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     if (!orderId) { apply(SAMPLE); show(); return; }
-    fetch(API + '?o=' + encodeURIComponent(orderId))
+    
+    // PERBAIKAN: Sertakan Header Authorization dan apikey
+    fetch(API + '?o=' + encodeURIComponent(orderId), {
+      method: 'GET',
+      headers: {
+        'apikey': ANON_KEY,
+        'Authorization': 'Bearer ' + ANON_KEY
+      }
+    })
       .then(function (r) { if (!r.ok) throw new Error('nf'); return r.json(); })
       .then(function (o) { apply(o); show(); })
       .catch(fail);

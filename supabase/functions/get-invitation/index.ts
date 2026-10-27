@@ -27,6 +27,7 @@ Deno.serve(async (req) => {
     .from("orders")
     .select(
       "order_id, status, category, groom_name, bride_name, event_date, venue_url, whatsapp_rsvp, " +
+      "bride_photo_url, groom_photo_url, gallery_urls, background_music_url, " +
       "recipient_name, sender_name, occasion, card_message, " +
       "base_price, addon_price, total_price, paid_at, invitation_link, products(name)"
     )
