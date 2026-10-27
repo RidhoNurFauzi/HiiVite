@@ -44,6 +44,9 @@ const els = {
   summaryAddon: $('summaryAddon'),
   summaryTotal: $('summaryTotal'),
 
+  invoiceLink: $('invoiceLink'),
+  waInvoiceBtn: $('waInvoiceBtn'),
+
   payBtn: $('payNowBtn'),
   qrisContainer: $('qrisContainer'),
   qrisImage: $('qrisImage'),
@@ -242,6 +245,14 @@ els.form.addEventListener('submit', async (e) => {
     showError('Please select a valid event date.');
     return;
   }
+  if (!els.customerEmail.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(els.customerEmail.value.trim())) {
+    showError('Please enter a valid email. Your invoice will be sent there.');
+    return;
+  }
+  if (!els.customerPhone.value.trim()) {
+    showError('Please enter your WhatsApp number.');
+    return;
+  }
 
   const payload = {
     product_id: selectedProduct.id,
@@ -373,6 +384,15 @@ function showPaid(order) {
   } else {
     els.invitationLink.classList.add('hidden');
   }
+
+  const invoiceUrl = `${window.location.origin}/invoice.html?o=${encodeURIComponent(currentOrderId)}`;
+    els.invoiceLink.href = invoiceUrl;
+    els.waInvoiceBtn.href =
+    'https://wa.me/?text=' +
+    encodeURIComponent(
+      `Invoice Hiivite ${currentOrderId}\n${invoiceUrl}` +
+      (order.invitation_link ? `\n\nUndangan: ${order.invitation_link}` : '')
+    );
 
   els.payBtn.disabled = true;
   els.payBtn.textContent = 'Payment Completed';

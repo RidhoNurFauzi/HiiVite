@@ -67,6 +67,8 @@ function validate(category: string, d: ReturnType<typeof parseOrderPayload>) {
   if (d.customerPhone && !/^[0-9+\-\s]{8,20}$/.test(d.customerPhone)) {
     errors.push("Customer phone is invalid.");
   }
+  if (!d.customerEmail) errors.push("Email is required for your invoice.");
+  if (!d.customerPhone) errors.push("Phone number is required.");
 
   if (category === "greeting_card") {
     if (!d.recipientName) errors.push("Recipient name is required.");

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Pernikahan — Andini & Raka</title>
+    <title>Undangan Pernikahan — {{bride_first}} & {{groom_first}}</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -169,6 +169,9 @@
         .corner-br { bottom: 12px; right: 12px; border-bottom: 1px solid; border-right: 1px solid; }
     </style>
 </head>
+
+<script src="/templates/invitation-loader.js"></script>
+
 <body class="bg-obsidian text-cream font-sans selection:bg-gold selection:text-obsidian overflow-x-hidden">
 
     <!-- Interactive Canvas Particle Ambient -->
@@ -211,9 +214,9 @@
             <!-- Names -->
             <div class="my-auto py-6">
                 <h1 class="font-serif text-5xl md:text-6xl text-gold-gradient font-light leading-tight tracking-tight">
-                    Andini <span class="font-script text-4xl md:text-5xl text-gold-light block my-1">&amp;</span> Raka
+                    {{bride_first}} <span class="font-script text-4xl md:text-5xl text-gold-light block my-1">&amp;</span> {{groom_first}}
                 </h1>
-                <p class="font-cinzel text-[10px] tracking-[0.35em] text-muted uppercase mt-3">Saturday, 12 December 2026</p>
+                <p class="font-cinzel text-[10px] tracking-[0.35em] text-muted uppercase mt-3">{{date_en}}</p>
 
                 <!-- Guest Invitation Plate -->
                 <div class="mt-8 p-4 bg-espresso/60 border border-gold/30 rounded-sm max-w-xs mx-auto backdrop-blur-md">
@@ -266,12 +269,12 @@
             <div class="relative z-10 max-w-5xl mx-auto text-center reveal">
                 <!-- Floating Crest Badge -->
                 <div class="w-20 h-20 rounded-full border border-gold/50 flex items-center justify-center mx-auto mb-8 bg-obsidian/60 backdrop-blur-md text-gold font-serif text-2xl shadow-2xl">
-                    A&amp;R
+                    {{initials}}
                 </div>
 
                 <span class="font-cinzel text-xs uppercase tracking-[0.4em] text-gold block mb-4">The Celebration Of Marriage</span>
                 <h1 class="font-serif text-6xl sm:text-8xl md:text-9xl font-light text-gold-gradient mb-6 tracking-tight leading-none">
-                    Andini <span class="font-script text-5xl md:text-7xl text-gold-light block md:inline font-normal my-2 md:my-0">&amp;</span> Raka
+                    {{bride_first}} <span class="font-script text-5xl md:text-7xl text-gold-light block md:inline font-normal my-2 md:my-0">&amp;</span> {{groom_first}}
                 </h1>
 
                 <p class="font-serif italic text-xl md:text-2xl text-cream/90 font-light mb-12">
@@ -335,21 +338,21 @@
                     <div class="relative group">
                         <!-- Main Portrait Frame -->
                         <div class="relative z-10 gold-frame-double overflow-hidden shadow-2xl bg-espresso aspect-[3/4] max-w-md mx-auto lg:mx-0">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Andini Kirana" class="w-full h-full object-cover filter brightness-95 group-hover:scale-105 transition-transform duration-1000">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="{{bride}}" class="w-full h-full object-cover filter brightness-95 group-hover:scale-105 transition-transform duration-1000">
                         </div>
                         <!-- Background Accent Box -->
                         <div class="absolute -top-6 -left-6 w-full h-full border border-gold/30 rounded-sm pointer-events-none hidden sm:block"></div>
                     </div>
                     <div class="mt-8 text-center lg:text-left max-w-md mx-auto lg:mx-0">
                         <span class="font-cinzel text-[10px] tracking-[0.3em] uppercase text-gold font-medium block mb-1">The Bride</span>
-                        <h3 class="font-serif text-4xl font-light text-gold-gradient">Andini Kirana, S.Ds</h3>
+                        <h3 class="font-serif text-4xl font-light text-gold-gradient">{{bride}}</h3>
                         <p class="text-xs text-muted font-light leading-relaxed mt-3">
                             Putri Pertama dari Pasangan <br>
                             <span class="text-cream font-normal">Bpk. Bambang Wijaya</span> &amp; <span class="text-cream font-normal">Ibu Sri Rahayu</span>
                         </p>
                         <div class="mt-4">
                             <a href="#" class="inline-flex items-center gap-2 text-xs text-gold hover:text-gold-bright transition-colors font-cinzel tracking-wider">
-                                <i class="fa-brands fa-instagram text-sm"></i> @andinikirana
+                                <i class="fa-brands fa-instagram text-sm"></i> @{{bride_first}}kirana
                             </a>
                         </div>
                     </div>
@@ -364,20 +367,20 @@
                 <div class="lg:col-span-5 reveal lg:mt-24">
                     <div class="relative group">
                         <div class="relative z-10 gold-frame-double overflow-hidden shadow-2xl bg-espresso aspect-[3/4] max-w-md mx-auto lg:ml-auto">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" alt="Raka Pratama" class="w-full h-full object-cover filter brightness-95 group-hover:scale-105 transition-transform duration-1000">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" alt="{{groom}}" class="w-full h-full object-cover filter brightness-95 group-hover:scale-105 transition-transform duration-1000">
                         </div>
                         <div class="absolute -bottom-6 -right-6 w-full h-full border border-gold/30 rounded-sm pointer-events-none hidden sm:block"></div>
                     </div>
                     <div class="mt-8 text-center lg:text-right max-w-md mx-auto lg:ml-auto">
                         <span class="font-cinzel text-[10px] tracking-[0.3em] uppercase text-gold font-medium block mb-1">The Groom</span>
-                        <h3 class="font-serif text-4xl font-light text-gold-gradient">Raka Pratama, S.T</h3>
+                        <h3 class="font-serif text-4xl font-light text-gold-gradient">{{groom}}</h3>
                         <p class="text-xs text-muted font-light leading-relaxed mt-3">
                             Putra Kedua dari Pasangan <br>
                             <span class="text-cream font-normal">Bpk. Hendra Pratama</span> &amp; <span class="text-cream font-normal">Ibu Dewi Lestari</span>
                         </p>
                         <div class="mt-4">
                             <a href="#" class="inline-flex items-center gap-2 text-xs text-gold hover:text-gold-bright transition-colors font-cinzel tracking-wider">
-                                <i class="fa-brands fa-instagram text-sm"></i> @rakapratama
+                                <i class="fa-brands fa-instagram text-sm"></i> @{{groom_first}}pratama
                             </a>
                         </div>
                     </div>
@@ -402,7 +405,7 @@
                             <h3 class="font-serif text-3xl font-light text-gold-gradient">Akad Nikah</h3>
                             <i class="fa-solid fa-ring text-2xl text-gold/80"></i>
                         </div>
-                        <p class="font-cinzel text-xs uppercase tracking-[0.25em] text-gold-light mb-6">Saturday, 12 December 2026</p>
+                        <p class="font-cinzel text-xs uppercase tracking-[0.25em] text-gold-light mb-6">{{date_en}}</p>
                         <div class="space-y-3 text-sm text-cream/90 font-light mb-8">
                             <p class="flex items-center gap-3"><i class="fa-regular fa-clock text-gold"></i> 08:00 WIB — 10:00 WIB</p>
                             <p class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-gold"></i> The Grand Ballroom, Level 3</p>
@@ -424,7 +427,7 @@
                             <h3 class="font-serif text-3xl font-light text-gold-gradient">Resepsi</h3>
                             <i class="fa-solid fa-champagne-glasses text-2xl text-gold/80"></i>
                         </div>
-                        <p class="font-cinzel text-xs uppercase tracking-[0.25em] text-gold-light mb-6">Saturday, 12 December 2026</p>
+                        <p class="font-cinzel text-xs uppercase tracking-[0.25em] text-gold-light mb-6">{{date_en}}</p>
                         <div class="space-y-3 text-sm text-cream/90 font-light mb-8">
                             <p class="flex items-center gap-3"><i class="fa-regular fa-clock text-gold"></i> 11:00 WIB — 15:00 WIB</p>
                             <p class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-gold"></i> The Grand Ballroom, Main Hall</p>
@@ -520,7 +523,7 @@
                         <div class="text-left">
                             <span class="font-cinzel font-bold text-gold tracking-widest block text-sm">BANK BCA</span>
                             <span class="font-mono text-xl text-cream font-medium">1234 5678 90</span>
-                            <p class="text-[11px] text-muted">a.n. Andini Kirana</p>
+                            <p class="text-[11px] text-muted">a.n. {{bride}}</p>
                         </div>
                         <button onclick="copyText('1234567890', 'BCA Account Number')" class="px-6 py-2.5 bg-gold/20 hover:bg-gold hover:text-obsidian text-gold border border-gold/40 rounded-full font-cinzel text-[9px] uppercase tracking-widest transition-all flex items-center gap-2">
                             <i class="fa-regular fa-copy"></i> Copy
@@ -532,7 +535,7 @@
                         <div class="text-left">
                             <span class="font-cinzel font-bold text-gold tracking-widest block text-sm">BANK MANDIRI</span>
                             <span class="font-mono text-xl text-cream font-medium">9876 5432 10</span>
-                            <p class="text-[11px] text-muted">a.n. Raka Pratama</p>
+                            <p class="text-[11px] text-muted">a.n. {{groom}}</p>
                         </div>
                         <button onclick="copyText('9876543210', 'Mandiri Account Number')" class="px-6 py-2.5 bg-gold/20 hover:bg-gold hover:text-obsidian text-gold border border-gold/40 rounded-full font-cinzel text-[9px] uppercase tracking-widest transition-all flex items-center gap-2">
                             <i class="fa-regular fa-copy"></i> Copy
@@ -591,7 +594,7 @@
                                 <h4 class="font-medium text-sm text-gold">Bambang &amp; Keluarga</h4>
                                 <span class="font-cinzel text-[8px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 border border-gold/30">Hadir</span>
                             </div>
-                            <p class="text-xs text-cream/80 leading-relaxed font-light">Selamat untuk Andini & Raka! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah.</p>
+                            <p class="text-xs text-cream/80 leading-relaxed font-light">Selamat untuk {{bride_first}} & {{groom_first}}! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah.</p>
                             <span class="text-[9px] text-muted mt-3 block">10 menit yang lalu</span>
                         </div>
 
@@ -612,9 +615,9 @@
         <!-- EDITORIAL FOOTER -->
         <footer class="py-20 bg-obsidian text-center border-t border-gold/20 relative">
             <div class="w-16 h-16 rounded-full border border-gold/40 flex items-center justify-center mx-auto mb-6 text-gold font-serif text-xl">
-                A&amp;R
+                {{initials}}
             </div>
-            <h3 class="font-serif text-4xl font-light text-gold-gradient">Andini &amp; Raka</h3>
+            <h3 class="font-serif text-4xl font-light text-gold-gradient">{{bride_first}} &amp; {{groom_first}}</h3>
             <p class="font-cinzel text-[9px] text-muted tracking-[0.35em] uppercase mt-4">Thank You For Celebrating With Us</p>
         </footer>
 
@@ -770,10 +773,10 @@
 
         // 5. COUNTDOWN TIMER
         function startCountdown() {
-            const weddingDate = new Date('December 12, 2026 08:00:00').getTime();
-
             const timer = setInterval(() => {
+                const weddingDate = new Date(window.INV ? window.INV.eventISO : 'December 12, 2026 08:00:00').getTime();
                 const now = new Date().getTime();
+                
                 const distance = weddingDate - now;
 
                 if (distance < 0) {

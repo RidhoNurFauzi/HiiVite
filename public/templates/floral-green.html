@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Pernikahan — Andini & Raka</title>
+    <title>Undangan Pernikahan — {{bride_first}} & {{groom_first}}</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -101,6 +101,9 @@
         #petalCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 45; }
     </style>
 </head>
+
+<script src="/templates/invitation-loader.js"></script>
+
 <body class="text-ink font-sans antialiased">
 
     <!-- Canvas Petals -->
@@ -138,9 +141,9 @@
                 <div class="absolute inset-0 bg-black/20 z-0"></div>
                 <div class="relative z-10 flex flex-col items-center">
                     <p class="text-[10px] tracking-[0.4em] uppercase text-gold mb-6">The Wedding Of</p>
-                    <h1 class="font-script text-6xl md:text-7xl text-gold drop-shadow-lg mb-2">Andini</h1>
+                    <h1 class="font-script text-6xl md:text-7xl text-gold drop-shadow-lg mb-2">{{bride_first}}</h1>
                     <span class="font-serif italic text-2xl text-cream/70 my-2">&amp;</span>
-                    <h1 class="font-script text-6xl md:text-7xl text-gold drop-shadow-lg mt-2 mb-8">Raka</h1>
+                    <h1 class="font-script text-6xl md:text-7xl text-gold drop-shadow-lg mt-2 mb-8">{{groom_first}}</h1>
                     
                     <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent my-6"></div>
                     
@@ -166,16 +169,16 @@
             <div class="relative z-10 text-center px-4 w-full reveal-up">
                 <p class="text-xs uppercase tracking-[0.4em] text-gold font-medium mb-4">Pernikahan</p>
                 <div class="flex flex-col items-center justify-center">
-                    <h1 class="font-script text-7xl md:text-9xl text-cream text-shadow-xl">Andini</h1>
+                    <h1 class="font-script text-7xl md:text-9xl text-cream text-shadow-xl">{{bride_first}}</h1>
                     <span class="font-serif text-3xl md:text-5xl text-gold italic my-[-10px] z-10">dan</span>
-                    <h1 class="font-script text-7xl md:text-9xl text-cream text-shadow-xl">Raka</h1>
+                    <h1 class="font-script text-7xl md:text-9xl text-cream text-shadow-xl">{{groom_first}}</h1>
                 </div>
                 <div class="mt-10 mb-12 flex items-center justify-center gap-4 text-cream font-serif text-lg md:text-2xl tracking-widest">
-                    <span>12</span>
+                    {{dd}}
                     <span class="w-1 h-1 bg-gold rounded-full"></span>
-                    <span>12</span>
+                    {{mm}}
                     <span class="w-1 h-1 bg-gold rounded-full"></span>
-                    <span>2026</span>
+                    {{yyyy}}
                 </div>
 
                 <!-- Sleek Countdown -->
@@ -242,7 +245,7 @@
                             <div class="absolute inset-0 bg-gold/10 mix-blend-overlay"></div>
                         </div>
                         <div class="text-center md:text-right">
-                            <h3 class="font-serif text-3xl text-green-deep">Andini Kirana, S.Ds</h3>
+                            <h3 class="font-serif text-3xl text-green-deep">{{bride}}</h3>
                             <p class="text-[10px] uppercase tracking-widest text-gold font-bold mt-2 mb-3">Mempelai Wanita</p>
                             <p class="text-sm text-green-forest/80 font-serif italic">Putri Pertama dari <br>Bpk. Bambang Wijaya & Ibu Sri Rahayu</p>
                             <a href="#" class="inline-block mt-4 text-gold hover:text-green-deep transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
@@ -258,7 +261,7 @@
                     <!-- Groom -->
                     <div class="w-full md:w-5/12 flex flex-col items-center md:items-start md:pl-10 md:mt-20 z-20 reveal-right">
                         <div class="text-center md:text-left order-2 md:order-1 mt-6 md:mt-0 md:mb-6">
-                            <h3 class="font-serif text-3xl text-green-deep">Raka Pratama, S.T</h3>
+                            <h3 class="font-serif text-3xl text-green-deep">{{groom}}</h3>
                             <p class="text-[10px] uppercase tracking-widest text-gold font-bold mt-2 mb-3">Mempelai Pria</p>
                             <p class="text-sm text-green-forest/80 font-serif italic">Putra Kedua dari <br>Bpk. Hendra Pratama & Ibu Dewi Lestari</p>
                             <a href="#" class="inline-block mt-4 text-gold hover:text-green-deep transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
@@ -292,7 +295,7 @@
                         <div class="space-y-4 font-sans text-sm text-green-forest border-y border-gold/30 py-6 mb-6">
                             <div>
                                 <p class="uppercase tracking-widest font-semibold text-[10px] text-green-light mb-1">Hari & Tanggal</p>
-                                <p class="font-serif text-lg">Sabtu, 12 Desember 2026</p>
+                                <p class="font-serif text-lg">{{date_id}}</p>
                             </div>
                             <div>
                                 <p class="uppercase tracking-widest font-semibold text-[10px] text-green-light mb-1">Waktu</p>
@@ -313,7 +316,7 @@
                         <div class="space-y-4 font-sans text-sm text-green-forest border-y border-gold/30 py-6 mb-6">
                             <div>
                                 <p class="uppercase tracking-widest font-semibold text-[10px] text-green-light mb-1">Hari & Tanggal</p>
-                                <p class="font-serif text-lg">Sabtu, 12 Desember 2026</p>
+                                <p class="font-serif text-lg">{{date_id}}</p>
                             </div>
                             <div>
                                 <p class="uppercase tracking-widest font-semibold text-[10px] text-green-light mb-1">Waktu</p>
@@ -416,7 +419,7 @@
                                 <div>
                                     <p class="text-gold font-bold tracking-widest uppercase text-xs mb-1">BCA</p>
                                     <p class="font-serif text-xl tracking-wider">1234 5678 90</p>
-                                    <p class="text-xs text-cream/50 mt-1">a.n Andini Kirana</p>
+                                    <p class="text-xs text-cream/50 mt-1">a.n {{bride}}</p>
                                 </div>
                                 <button onclick="copyText('1234567890', 'BCA')" class="w-10 h-10 rounded-full bg-gold text-green-deep flex items-center justify-center hover:scale-110 transition-transform">
                                     <i class="fa-regular fa-copy"></i>
@@ -426,7 +429,7 @@
                                 <div>
                                     <p class="text-gold font-bold tracking-widest uppercase text-xs mb-1">MANDIRI</p>
                                     <p class="font-serif text-xl tracking-wider">0987 6543 21</p>
-                                    <p class="text-xs text-cream/50 mt-1">a.n Raka Pratama</p>
+                                    <p class="text-xs text-cream/50 mt-1">a.n {{groom}}</p>
                                 </div>
                                 <button onclick="copyText('0987654321', 'Mandiri')" class="w-10 h-10 rounded-full bg-gold text-green-deep flex items-center justify-center hover:scale-110 transition-transform">
                                     <i class="fa-regular fa-copy"></i>
@@ -480,7 +483,7 @@
 
         <!-- FOOTER -->
         <footer class="py-16 bg-green-deep text-cream text-center border-t border-gold/20 relative overflow-hidden">
-            <h1 class="font-script text-5xl text-gold mb-4">Andini & Raka</h1>
+            <h1 class="font-script text-5xl text-gold mb-4">{{bride_first}} & {{groom_first}}</h1>
             <p class="text-xs uppercase tracking-widest text-cream/50 mb-8">Terima kasih atas doa dan restu Anda</p>
             <p class="text-[9px] tracking-widest text-cream/30">Created with Floral Elegance Theme</p>
         </footer>

@@ -138,6 +138,8 @@
   <meta name="twitter:title" content="Hiivite — Wedding Invitations & Greeting Cards" />
   <meta name="twitter:description" content="Pick a ready-made template and pay instantly with QRIS, or work with our developer on a custom design." />
   <meta name="twitter:image" content="https://hiivite-weeding-invitation.netlify.app/og-image.png" />
+
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
 </head>
 
 <body class="bg-cream text-ink">
@@ -410,11 +412,12 @@
             <div id="paymentSuccess" class="hidden mt-4 rounded-2xl border border-green-200 bg-green-50/70 p-7 text-center">
               <div class="w-12 h-12 mx-auto rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl mb-3">&#10003;</div>
               <p class="font-serif text-2xl text-ink mb-1">Payment Successful</p>
-              <p class="text-sm text-muted mb-5">Your invitation is ready. We've sent the link to your email.</p>
-              <a id="invitationLink" href="#" target="_blank"
-                class="btn-solid inline-block text-[0.75rem] tracking-[0.2em] uppercase px-8 py-3.5 rounded-full">
-                View Your Invitation
-              </a>
+              <p class="text-sm text-muted mb-5">Your invoice and invitation link have been sent to your email.</p>
+              <div class="flex flex-col gap-3 items-center">
+                <a id="invitationLink" href="#" target="_blank" class="btn-solid inline-block text-[0.75rem] tracking-[0.2em] uppercase px-8 py-3.5 rounded-full">View Your Invitation</a>
+                <a id="invoiceLink" href="#" target="_blank" class="btn-line inline-block text-[0.75rem] tracking-[0.2em] uppercase px-8 py-3.5 rounded-full">View Invoice</a>
+                <a id="waInvoiceBtn" href="#" target="_blank" rel="noopener" class="text-xs text-gold-dark underline">Save invoice to my WhatsApp</a>
+              </div>
             </div>
           </div>
 

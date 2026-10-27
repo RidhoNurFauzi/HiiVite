@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Invoice — Hiivite</title>
+<style>
+  body{margin:0;background:#FBF8F3;font-family:Arial,sans-serif;color:#2A2420}
+  .wrap{max-width:620px;margin:0 auto;padding:32px 20px}
+  h1{font-family:Georgia,serif;letter-spacing:4px;font-size:24px;margin:0}
+  .card{background:#fff;border:1px solid #efe6d8;border-radius:14px;padding:28px;margin-top:20px}
+  .lbl{font-size:12px;color:#857B71;margin:14px 0 2px}
+  .val{margin:0;font-weight:bold}
+  table{width:100%;border-collapse:collapse;margin-top:20px}
+  td{padding:10px 0;border-bottom:1px solid #eee;font-size:14px}
+  td:last-child{text-align:right}
+  .total td{font-weight:bold;font-size:18px;border:0;padding-top:16px}
+  .paid{color:#15803d}
+  .btns{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{padding:12px 22px;border-radius:999px;font-size:13px;text-decoration:none;border:1px solid #2A2420;background:#2A2420;color:#fff;cursor:pointer}
+  .btn.line{background:transparent;color:#2A2420}
+  @media print{.btns{display:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>HIIVITE</h1>
+  <div id="out" class="card">Memuat invoice…</div>
+</div>
+<script>
+  var API = 'https://dfzfdctinntceledejds.supabase.co/functions/v1/get-invitation';
+  var DEV_WA = '6281316065637';
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+  var idr = function (n) { return 'IDR ' + Number(n).toLocaleString('id-ID'); };
+  var id = new URLSearchParams(location.search).get('o');
+  var out = document.getElementById('out');
+
+  if (!id) { out.textContent = 'Invoice tidak ditemukan.'; }
+  else fetch(API + '?o=' + encodeURIComponent(id))
+    .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (o) {
+      var who = o.category === 'greeting_card'
+        ? esc(o.sender_name) + ' → ' + esc(o.recipient_name)
+        : esc(o.groom_name) + ' &amp; ' + esc(o.bride_name);
+      var paid = new Date(o.paid_at).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', dateStyle: 'long', timeStyle: 'short' });
+      out.innerHTML =
+        '<p class="lbl" style="margin-top:0">No. Invoice</p><p class="val">' + esc(o.order_id) + '</p>' +
+        '<p class="lbl">Dibayar pada</p><p class="val">' + esc(paid) + ' WIB <span class="paid">· LUNAS</span></p>' +
+        '<p class="lbl">Atas nama</p><p class="val">' + who + '</p>' +
+        '<table><tr><td>' + esc(o.product_name) + '</td><td>' + idr(o.base_price) + '</td></tr>' +
+        (Number(o.addon_price) > 0 ? '<tr><td>WhatsApp RSVP Add-on</td><td>' + idr(o.addon_price) + '</td></tr>' : '') +
+        '<tr class="total"><td>Total</td><td>' + idr(o.total_price) + '</td></tr></table>' +
+        '<div class="btns">' +
+          '<button class="btn" onclick="window.print()">Cetak / Simpan PDF</button>' +
+          (o.invitation_link ? '<a class="btn line" href="' + esc(o.invitation_link) + '">Buka Undangan</a>' : '') +
+          '<a class="btn line" target="_blank" rel="noopener" href="https://wa.me/' + DEV_WA + '?text=' +
+            encodeURIComponent('Halo, saya butuh bantuan untuk pesanan ' + o.order_id) + '">Hubungi Kami</a>' +
+        '</div>';
+    })
+    .catch(function () { out.textContent = 'Invoice tidak ditemukan atau pembayaran belum selesai.'; });
+</script>
+</body>
+</html>

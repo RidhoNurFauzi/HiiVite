@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Wedding of James & Julia</title>
+    <title>The Wedding of {{groom_first}} & {{bride_first}}</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -156,6 +156,9 @@
         .gallery-item:hover .gallery-img { transform: scale(1.08); filter: grayscale(0%) brightness(100%); }
     </style>
 </head>
+
+<script src="/templates/invitation-loader.js"></script>
+
 <body class="font-montserrat antialiased relative locked">
 
     <!-- AUDIO ELEMENT -->
@@ -187,7 +190,7 @@
             <p class="uppercase tracking-[0.3em] text-xs md:text-sm text-gold-light mb-6">The Wedding Of</p>
             
             <h1 class="font-vibes text-7xl md:text-9xl text-gold-gradient mb-8 leading-tight drop-shadow-2xl">
-                James & Julia
+                {{groom_first}} & {{bride_first}}
             </h1>
             
             <div class="bg-emerald-900/50 backdrop-blur-sm border border-gold/30 rounded-2xl p-6 mb-8 w-full">
@@ -218,11 +221,11 @@
             <div class="text-center z-10 px-6 max-w-4xl mx-auto flex flex-col items-center">
                 <p class="uppercase tracking-[0.4em] text-sm md:text-base text-gold-light mb-6 reveal-up delay-100">Welcome To Our Wedding</p>
                 <h1 class="font-vibes text-6xl md:text-8xl lg:text-9xl text-gold-gradient mb-6 leading-tight reveal-up delay-200">
-                    James & Julia
+                    {{groom_first}} & {{bride_first}}
                 </h1>
                 <div class="w-32 h-[1px] bg-gold mx-auto mb-6 reveal-up delay-300"></div>
                 <p class="font-playfair text-xl md:text-3xl text-gold-light italic tracking-wide reveal-up delay-400">
-                    15 . 11 . 2026
+                    {{dd}} . {{mm}} . {{yyyy}}
                 </p>
             </div>
 
@@ -274,12 +277,12 @@
                     <div class="flex-1 flex flex-col items-center reveal-up delay-100 text-center group w-full max-w-sm">
                         <div class="relative p-3 rounded-t-full rounded-b-xl border border-gold/30 mb-8 transition-all duration-700 group-hover:border-gold group-hover:shadow-[0_10px_30px_rgba(212,175,55,0.2)]">
                             <div class="w-56 h-72 md:w-64 md:h-80 overflow-hidden arch-shape relative z-10 clip-reveal active">
-                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400" alt="James" class="w-full h-full object-cover filter brightness-90 group-hover:scale-110 transition-transform duration-1000 ease-out">
+                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400" alt="{{groom_first}}" class="w-full h-full object-cover filter brightness-90 group-hover:scale-110 transition-transform duration-1000 ease-out">
                                 <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent to-transparent opacity-80"></div>
                             </div>
                         </div>
-                        <h3 class="font-vibes text-5xl md:text-6xl text-gold mb-2">James</h3>
-                        <p class="font-playfair font-bold text-xl text-white mb-3">James Anderson</p>
+                        <h3 class="font-vibes text-5xl md:text-6xl text-gold mb-2">{{groom_first}}</h3>
+                        <p class="font-playfair font-bold text-xl text-white mb-3">{{groom}}</p>
                         <div class="w-12 h-px bg-gold/50 mb-3"></div>
                         <p class="text-sm text-gray-400 font-light leading-relaxed">Putra dari<br><span class="text-white font-medium">Bapak Fulan & Ibu Fulanah</span></p>
                         <a href="#" class="mt-5 text-gold/70 hover:text-gold transition-colors">
@@ -294,12 +297,12 @@
                     <div class="flex-1 flex flex-col items-center reveal-up delay-200 text-center group w-full max-w-sm">
                         <div class="relative p-3 rounded-t-full rounded-b-xl border border-gold/30 mb-8 transition-all duration-700 group-hover:border-gold group-hover:shadow-[0_10px_30px_rgba(212,175,55,0.2)]">
                             <div class="w-56 h-72 md:w-64 md:h-80 overflow-hidden arch-shape relative z-10 clip-reveal active">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" alt="Julia" class="w-full h-full object-cover filter brightness-90 group-hover:scale-110 transition-transform duration-1000 ease-out">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" alt="{{bride_first}}" class="w-full h-full object-cover filter brightness-90 group-hover:scale-110 transition-transform duration-1000 ease-out">
                                 <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent to-transparent opacity-80"></div>
                             </div>
                         </div>
-                        <h3 class="font-vibes text-5xl md:text-6xl text-gold mb-2">Julia</h3>
-                        <p class="font-playfair font-bold text-xl text-white mb-3">Julia Heart</p>
+                        <h3 class="font-vibes text-5xl md:text-6xl text-gold mb-2">{{bride_first}}</h3>
+                        <p class="font-playfair font-bold text-xl text-white mb-3">{{bride}}</p>
                         <div class="w-12 h-px bg-gold/50 mb-3"></div>
                         <p class="text-sm text-gray-400 font-light leading-relaxed">Putri dari<br><span class="text-white font-medium">Bapak Fulan & Ibu Fulanah</span></p>
                         <a href="#" class="mt-5 text-gold/70 hover:text-gold transition-colors">
@@ -328,7 +331,7 @@
                             <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
                         </div>
                         <h3 class="font-playfair text-3xl text-gold mb-2">Akad Nikah</h3>
-                        <p class="font-montserrat text-white text-lg font-medium mb-1">Minggu, 15 November 2026</p>
+                        <p class="font-montserrat text-white text-lg font-medium mb-1">{{date_id}}</p>
                         <p class="text-gold-light text-sm mb-6">Pukul 08.00 WIB - Selesai</p>
                         
                         <div class="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6"></div>
@@ -349,7 +352,7 @@
                             <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"/></svg>
                         </div>
                         <h3 class="font-playfair text-3xl text-gold mb-2">Resepsi</h3>
-                        <p class="font-montserrat text-white text-lg font-medium mb-1">Minggu, 15 November 2026</p>
+                        <p class="font-montserrat text-white text-lg font-medium mb-1">{{date_id}}</p>
                         <p class="text-gold-light text-sm mb-6">Pukul 11.00 WIB - 14.00 WIB</p>
                         
                         <div class="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6"></div>
@@ -472,7 +475,7 @@
             
             <div class="relative z-10">
                 <p class="font-amiri text-gold text-xl mb-4">جَزَاكُمُ اللَّهُ خَيْرًا</p>
-                <h2 class="font-vibes text-5xl md:text-6xl text-gold mb-6 drop-shadow-lg">James & Julia</h2>
+                <h2 class="font-vibes text-5xl md:text-6xl text-gold mb-6 drop-shadow-lg">{{groom_first}} & {{bride_first}}</h2>
                 <p class="text-xs text-gray-400 tracking-[0.2em] uppercase font-light">Thank you for your prayers and blessings</p>
             </div>
         </footer>
